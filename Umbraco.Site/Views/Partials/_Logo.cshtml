@@ -1,0 +1,15 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+    var settingsNode = Umbraco.TypedContent(2086);
+    string media = (string)settingsNode.GetPropertyValue("pageLogo");
+    string mediaUrl = (media != "" ? Umbraco.TypedMedia(media).Url : "[Logo]");
+}
+
+@if (media != "")
+{
+    <img src="@mediaUrl" alt="" />
+} else
+{
+    <span>@mediaUrl</span>
+}

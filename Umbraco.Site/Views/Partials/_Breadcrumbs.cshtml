@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{ 
+
+}
+
+@if (Model.Content.Level > 1)
+{
+    <div class="breadcrumbs">
+
+        <ul>
+            @*<li class="first">
+                <a href="/">Forsíða:</a>
+            </li>*@
+            @foreach (var node in Model.Content.Ancestors())
+            {
+                if (node.Level != 1)
+                {
+                    <li><a href="@node.Url">@node.Name</a></li>
+                }
+            }
+            <li class="active">
+                <span>@Model.Content.Name</span>
+            </li>
+        </ul>
+   
+    </div>
+}

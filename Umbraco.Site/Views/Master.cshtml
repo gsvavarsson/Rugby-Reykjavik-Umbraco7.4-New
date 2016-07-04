@@ -1,0 +1,86 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ClientDependency.Core
+@using ClientDependency.Core.Mvc
+
+@{
+    Layout = null;
+
+    /* JS
+       concatenated and minified by Grunt
+    */
+    Html.RequiresJs("/scripts/libs/jquery-1.11.3.min.js");
+    Html.RequiresJs("/scripts/libs/equal-height.min.js");
+    Html.RequiresJs("/scripts/libs/moment.min.js");
+    Html.RequiresJs("/scripts/app/compiled.js");
+
+    var bodyClass = (Model.Content.DocumentTypeAlias == "Frontpage" ? "frontpage" : "subpage");
+    string doctype = "doctype-" + Model.Content.DocumentTypeAlias.ToString().ToLower();
+    string pageId = "page-" + Model.Content.Id.ToString();
+    string pageName = "page-" + Model.Content.UrlName;
+
+    var settingsNode = Umbraco.TypedContent(2086);
+
+    bool updateInProgress = settingsNode.GetPropertyValue<bool>("updateInProgress");
+    string updateClass = (updateInProgress ? "update-in-progress" : "");
+}
+
+<!DOCTYPE html>
+<!--[if IE 8]>
+    <html id="ie8" lang="en-US">
+<![endif]-->
+<html>
+<head>
+    @* All meta tags are rendered in this partial*@
+    @Html.Partial("_Meta")
+
+    <!-- FAVICON -->
+    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+    <link href="/favicon.ico" type="image/x-icon" rel="icon">
+
+    <!-- CSS -->
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/rustikus/rustikus.css" type="text/css" />
+
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script>
+		window.slimmage = { tryWebP: true, verbose: false };
+    </script>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/mvc/5.1/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- RECAPTCHA -->
+    @*<script src='https://www.google.com/recaptcha/api.js'></script>*@
+</head>
+
+<body class="@bodyClass @doctype @pageId @pageName @updateClass">
+
+    @if (updateInProgress)
+    {
+        <text>@Html.Partial("_PageUpdate")</text>
+    }
+
+    @RenderSection("Header", false)
+
+    <main class="wrapper">
+
+        @RenderBody()
+
+        <div class="push"></div>
+    </main>
+
+    @RenderSection("Footer", false)
+
+    @Html.RenderJsHere()
+    @RenderSection("Scripts", false)
+
+
+
+    @uEdit.Helper.Build()
+
+</body>
+</html>

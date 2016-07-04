@@ -1,0 +1,106 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+    // VALUES FROM SETTINGS NODE
+    var settingsNode = Umbraco.TypedContent(2086);
+    string storeName = (!String.IsNullOrEmpty(settingsNode.GetPropertyValue<string>("pageName")) ? (string)settingsNode.GetPropertyValue("pageName") : "[Page Name]");
+    string storeTagline = (!String.IsNullOrEmpty(settingsNode.GetPropertyValue<string>("pageTagline")) ? (string)settingsNode.GetPropertyValue("pageTagline") : "[Page Tagline]");
+
+
+    // PAGE TITLE
+    string titleSuffix = storeName;
+    string titleTagline = storeTagline;
+    string nodeName = (Model.Content.HasValue("pageTitle")) ? Model.Content.GetPropertyValue<string>("pageTitle") : Model.Content.Name;
+    string titleDivider = " | ";
+    string pageTitle = (Model.Content.DocumentTypeAlias != "Frontpage" ? nodeName + titleDivider + titleSuffix : titleSuffix + titleDivider + titleTagline);
+
+    // URL
+    string siteUrl = Request.ServerVariables["HTTP_HOST"];
+    string pageUrl = Model.Content.Url;
+
+    // PAGE TYPE
+    string pageType = "website";
+    string documentType = Model.Content.DocumentTypeAlias;
+    switch (documentType)
+    {
+        case "Frontpage":
+        case "Subpage":
+            pageType = "website";
+            break;
+
+        case "Article":
+            pageType = "article";
+            break;
+    }
+
+    //get the open graph title
+    string ogTitle = (Model.Content.HasValue("ogTitle")) ? Model.Content.GetPropertyValue<string>("ogTitle") : pageTitle;
+
+    //meta description
+    string metaDescription = (Model.Content.HasValue("metaDescription")) ? Model.Content.GetPropertyValue<string>("metaDescription") : "";
+
+    //open graph description
+    string ogDescription = (Model.Content.HasValue("ogDescription")) ? Model.Content.GetPropertyValue<string>("ogDescription") : "";
+
+    //meta tags
+    string metaTags = (Model.Content.HasValue("metaTags")) ? Model.Content.GetPropertyValue<string>("metaTags") : "";
+
+    //open graph image
+    string ogImageId = (Model.Content.HasValue("ogImage")) ? Model.Content.GetPropertyValue<string>("ogImage") : "";
+    if (!string.IsNullOrEmpty(ogImageId))
+    {
+        switch (documentType)
+        {
+            case "Article":
+                ogImageId = (Model.Content.HasValue("image")) ? Model.Content.GetPropertyValue<string>("image") : "";
+                break;
+        }
+    }
+    string ogImageUrl = "";
+    if (!string.IsNullOrEmpty(ogImageId))
+    {
+        ogImageUrl = siteUrl + Umbraco.TypedMedia(ogImageId).Url;
+    }
+
+    //check if hidden from search engines
+    bool noIndex = (Model.Content.HasValue("hideFromSearchEngines")) ? Model.Content.GetPropertyValue<bool>("hideFromSearchEngines") : false;
+}
+
+<!-- charset and x-ua -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<!-- viewport -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+<!-- don't provide translate links -->
+<meta name="google" value="notranslate" />
+
+<title>@pageTitle</title>
+
+<!-- search engines -->
+<meta name="description" content="@metaDescription" />
+<meta name="keywords" content="@metaTags" />
+<meta name="author" content="Sendiráðið Vefstofa" />
+<meta name="copyright" content="Content eigendur" />
+
+<!-- social media -->
+<meta property="og:url" content="@siteUrl" />
+<meta property="og:site_name" content="@titleSuffix" />
+<meta property="og:type" content="@pageType" />
+<meta property="og:title" content="@pageTitle" />
+<meta property="og:description" content="@ogDescription" />
+<meta property="og:image" content="@ogImageUrl" />
+
+<!-- for Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="@pageTitle" />
+<meta name="twitter:description" content="@ogDescription" />
+<meta name="twitter:image" content="@ogImageUrl" />
+
+@if (noIndex)
+{
+    <meta name="robots" content="noindex,nofollow" />
+}
+
+<link rel="icon" type="image/ico" href="/favicon.ico">

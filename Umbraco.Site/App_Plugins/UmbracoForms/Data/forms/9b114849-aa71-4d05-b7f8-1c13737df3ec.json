@@ -1,0 +1,154 @@
+{
+  "name": "Form Test 1",
+  "created": "2016-06-06T17:00:54.6295933+00:00",
+  "pages": [
+    {
+      "fieldSets": [
+        {
+          "caption": "Form Test Group",
+          "sortOrder": 0,
+          "id": "6db5d2be-aad4-4132-8022-eddd19ca5049",
+          "page": "00000000-0000-0000-0000-000000000000",
+          "containers": [
+            {
+              "caption": null,
+              "width": 12,
+              "fields": [
+                {
+                  "caption": "Nafn?",
+                  "tooltip": "Nafnið þitt?",
+                  "placeholder": null,
+                  "cssClass": null,
+                  "alias": "nafn",
+                  "id": "57eb29f4-5e30-4afa-a2a6-6e2914c10e47",
+                  "fieldTypeId": "3f92e01b-29e2-4a30-bf33-9df5580ed52c",
+                  "prevalueSourceId": "00000000-0000-0000-0000-000000000000",
+                  "dataSourceFieldKey": null,
+                  "mandatory": true,
+                  "regex": null,
+                  "requiredErrorMessage": null,
+                  "invalidErrorMessage": null,
+                  "condition": {
+                    "id": "00000000-0000-0000-0000-000000000000",
+                    "enabled": false,
+                    "actionType": "Show",
+                    "logicType": "All",
+                    "rules": []
+                  },
+                  "settings": {
+                    "Placeholder": "Nafnið þitt placeholder?",
+                    "DefaultValue": ""
+                  },
+                  "preValues": []
+                },
+                {
+                  "caption": "Email",
+                  "tooltip": "Emailið þitt?",
+                  "placeholder": null,
+                  "cssClass": null,
+                  "alias": "email",
+                  "id": "757f75ef-ba15-41df-9590-3e3ed793b8c5",
+                  "fieldTypeId": "023f09ac-1445-4bcb-b8fa-ab49f33bd046",
+                  "prevalueSourceId": "00000000-0000-0000-0000-000000000000",
+                  "dataSourceFieldKey": null,
+                  "mandatory": false,
+                  "regex": null,
+                  "requiredErrorMessage": null,
+                  "invalidErrorMessage": null,
+                  "condition": {
+                    "id": "00000000-0000-0000-0000-000000000000",
+                    "enabled": false,
+                    "actionType": "Show",
+                    "logicType": "All",
+                    "rules": []
+                  },
+                  "settings": {
+                    "Placeholder": "hallo@hallo.is",
+                    "DefaultValue": ""
+                  },
+                  "preValues": []
+                }
+              ]
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "caption": "Form Test Page 1",
+      "sortOrder": 0,
+      "id": "00000000-0000-0000-0000-000000000000",
+      "form": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "fieldSets": [
+        {
+          "caption": "Form Test Group 2",
+          "sortOrder": 0,
+          "id": "17ed534b-c504-4098-a047-6a54318b4f31",
+          "page": "00000000-0000-0000-0000-000000000000",
+          "containers": [
+            {
+              "caption": "",
+              "width": 12,
+              "fields": [
+                {
+                  "caption": "Á hvaða síðu er ég?",
+                  "tooltip": "What page mang",
+                  "placeholder": null,
+                  "cssClass": null,
+                  "alias": "áHvaðaSíðuErÉg",
+                  "id": "91e1de81-6968-40ab-c868-8bcf5edbe3be",
+                  "fieldTypeId": "d5c0c390-ae9a-11de-a69e-666455d89593",
+                  "prevalueSourceId": "00000000-0000-0000-0000-000000000000",
+                  "dataSourceFieldKey": null,
+                  "mandatory": false,
+                  "regex": null,
+                  "requiredErrorMessage": null,
+                  "invalidErrorMessage": null,
+                  "condition": {
+                    "id": "00000000-0000-0000-0000-000000000000",
+                    "enabled": false,
+                    "actionType": "Show",
+                    "logicType": "All",
+                    "rules": []
+                  },
+                  "settings": {
+                    "DefaultValue": "yeeeeee"
+                  },
+                  "preValues": []
+                }
+              ]
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "caption": "Form Test Page 2",
+      "sortOrder": 0,
+      "id": "00000000-0000-0000-0000-000000000000",
+      "form": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "id": "9b114849-aa71-4d05-b7f8-1c13737df3ec",
+  "fieldIndicationType": "MarkMandatoryFields",
+  "indicator": "*",
+  "showValidationSummary": false,
+  "hideFieldValidation": false,
+  "requiredErrorMessage": "Please provide a value for {0}",
+  "invalidErrorMessage": "Please provide a valid value for {0}",
+  "messageOnSubmit": "Thank you",
+  "goToPageOnSubmit": 0,
+  "xPathOnSubmit": null,
+  "manualApproval": false,
+  "storeRecordsLocally": true,
+  "cssClass": null,
+  "disableDefaultStylesheet": false,
+  "useClientDependency": false,
+  "workflows": [
+    "7b2cfb17-412f-4cd4-a6ae-548857e8adb9"
+  ],
+  "datasource": null,
+  "submitLabel": "Submit",
+  "nextLabel": "Next",
+  "prevLabel": "Previous"
+}

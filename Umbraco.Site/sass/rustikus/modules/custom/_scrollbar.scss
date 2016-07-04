@@ -1,0 +1,20 @@
+// SCROLLBARS
+::-webkit-scrollbar {
+	width: 12px;
+
+	@include phone-md {
+		width: 8px;
+	}
+}
+
+::-webkit-scrollbar-track {
+	background: red;
+}
+
+::-webkit-scrollbar-thumb {
+	background: $brand-primary;
+
+	@include phone-md {
+		background: lighten($brand-primary, 12%);
+	}
+}

@@ -1,0 +1,15 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+
+@{
+    var number = Model.MacroParameters["number"];
+    var text = Model.MacroParameters["text"];
+    var numberUnit = Model.MacroParameters["numberUnit"];
+    var icon = Model.MacroParameters["icon"];
+    var delay = Model.MacroParameters["delay"];
+}
+
+<div class="number-game">
+    @icon
+    <h1 class="numberr" id="numberr" data-number="@number" data-unit="@numberUnit">0</h1>
+    @text
+</div>

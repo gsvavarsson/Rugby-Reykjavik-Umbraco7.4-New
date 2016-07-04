@@ -1,0 +1,94 @@
+// major
+main > section {
+	position: relative;
+}
+.relative {
+	position: relative;
+}
+.absolute {
+	position: absolute;
+}
+.fixed {
+	position: fixed;
+}
+.container-zindex {
+	.container {
+		position: relative;
+		z-index: map-get($zindex, above);
+	}
+}
+
+// TEXT
+
+.text-white {
+	color: $white;
+}
+
+.heading-white {
+	h1, h2, h3, h4 {
+		color: $white;
+		border-color: $white;
+	}
+}
+// Background
+.bgr-brand-info {
+	background-color: $brand-info;
+}
+.bgr-primary-light {
+	background-color: $primary-light;
+}
+
+.background-center {
+	background-position: 50% 50% !important;
+}
+
+.background-cover {
+	background-size: cover;
+}
+
+// Margin and padding loops
+
+$i: 0;
+@while $i < 210 {
+	.row-#{$i} { 
+		margin-left: -$i + px;
+		margin-right: -$i + px; 
+	}
+	.margin-top-#{$i} { 
+		margin-top: $i + px;
+	}
+	.margin-bottom-#{$i} { 
+		margin-bottom: $i + px;
+	}
+	.margin-right-#{$i} { 
+		margin-right: $i + px;
+	}
+	.margin-left-#{$i} { 
+		margin-left: $i + px;
+	}
+	
+	.padding-#{$i} { padding: $i + px; }
+	.padding-bottom-#{$i} { padding-bottom: $i + px; }
+	.padding-top-#{$i} { padding-top: $i + px; }
+	.padding-right-#{$i} { padding-right: $i + px; }
+	.padding-left-#{$i} { padding-left: $i + px; }
+	$i: $i + 5;
+}
+
+
+.background-overlay {
+	opacity: 1;
+	z-index: map-get($zindex, default);
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: rgba(black, 0.5);
+	@include transition(opacity 0.3s ease-in-out);
+	+ div {
+		z-index: 2;
+		position: relative;
+	}
+}

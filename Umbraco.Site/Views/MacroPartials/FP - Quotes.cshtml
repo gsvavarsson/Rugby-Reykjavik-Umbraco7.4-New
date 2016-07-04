@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{ 
+    var quoteNo = 1;
+
+    Random rnd = new Random();
+    int Random = rnd.Next(1, 7);
+
+    var quote = "quote" + Random;
+    var quoter = "quoter" + Random;
+    quote = Model.MacroParameters[quote].ToString();
+    quoter = Model.MacroParameters[quoter].ToString();
+
+}
+<div class="fp-quotes">
+	<h1 class="brand-info text-center"><i class="icon-quote-right"></i></h1>
+
+    <h2 class="text-center quote">@quote</h2>
+    <h4 class="text-center">@quoter</h4>
+</div>

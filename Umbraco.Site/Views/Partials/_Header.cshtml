@@ -1,0 +1,21 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+	string doctypeClass = (Model.Content.DocumentTypeAlias != "Frontpage" ? "header-subpage" : "");
+}
+
+<header class="@doctypeClass">
+	<div class="clearfix">
+		<h1 class="logo">
+			<a href="/">
+				@Html.Partial("_Logo")
+			</a>
+		</h1>
+
+		@Html.Partial("_Burger")
+
+		<nav class="main-nav">
+			@{ Html.RenderPartial("MainNavigation"); }
+		</nav>
+	</div>
+</header>

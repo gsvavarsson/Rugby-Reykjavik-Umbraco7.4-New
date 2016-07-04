@@ -1,0 +1,17 @@
+.notification {
+	width: 100%;
+	padding-top: 35px;
+	padding-bottom: 30px;
+	color: white;
+	font-size: $large;
+	.container {
+		text-align: center;
+	}
+	.container > * {
+		display: inline-block;
+		float: none;
+	}
+	a {
+		margin-left: 20px;
+	}
+}

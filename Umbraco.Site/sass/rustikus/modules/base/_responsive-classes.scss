@@ -1,0 +1,48 @@
+/* RESPNSIVE CLASSES
+---------------------------------------*/
+
+
+.no-mobile {
+	display: none;
+}
+
+.no-desktop {
+	display: none;
+}
+
+
+@include desktop-xl {
+	.no-mobile {
+		display: inline-block;
+	}
+}
+
+@include desktop-lg {
+	.no-mobile {
+		display: inline-block;
+	}
+}
+
+@include desktop-sm {
+	.no-mobile {
+		display: inline-block;
+	}
+}
+
+@include tablet {
+	.no-desktop {
+		display: inline-block;
+	}
+}
+
+@include phone-md {
+	.no-desktop {
+		display: inline-block ;
+	}
+}
+
+@include phone-sm {
+	.no-desktop {
+		display: inline-block ;
+	}
+}

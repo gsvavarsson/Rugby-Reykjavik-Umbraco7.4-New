@@ -1,0 +1,11 @@
+/* SELECTIONS
+---------------------------------------*/
+
+::selection {
+	background: $brand-primary; /* WebKit/Blink Browsers */
+	color: white;
+}
+::-moz-selection {
+	background: $brand-primary; /* Gecko Browsers */
+	color: white;
+}

@@ -1,0 +1,317 @@
+﻿@inherits UmbracoViewPage<uEdit.Models.uEditModels.View>
+@using Archetype.Models
+@{
+    var node = Umbraco.TypedContent(Model.pageId);
+        
+    if (node != null && node.HasProperty("uEdit")) {
+        
+        @RenderFrontEndControls(Model.alias,node)
+ 
+    }
+  
+}
+
+@helper RenderFrontEndControls(string alias, IPublishedContent node)
+{
+    var arche = node.GetPropertyValue<ArchetypeModel>("uEdit");
+    
+    var areaFieldset = arche.Where(x => x.GetValue<string>("alias") == alias).FirstOrDefault();
+    
+    if (areaFieldset != null) {
+    
+        foreach (var control in areaFieldset.GetValue<ArchetypeModel>("controls"))
+        {
+                
+            if (control != null)
+            {
+
+                string templatePath = string.Empty;
+
+                if (control.GetValue("template") != null && !string.IsNullOrEmpty(control.GetValue<string>("template")))
+                {
+
+                    if (System.IO.File.Exists(Server.MapPath(control.GetValue<string>("template"))))
+                    {
+                        templatePath = control.GetValue<string>("template");
+                    }
+                }
+
+                var controlType = control.GetValue<string>("type");
+
+                if (controlType == "uEditRichtext" || controlType == "uEditText")
+                {
+
+                    string body = control.GetValue<string>("content");
+                    string title = control.GetValue<string>("title");
+
+                    if (controlType == "uEditText" && !string.IsNullOrEmpty(body))
+                    {
+                        body = body.Replace("\n", "<br />");
+                    }
+                
+                    if (!string.IsNullOrEmpty(templatePath))
+                    {
+                        var obj = new ViewDataDictionary();
+
+                        obj.Add("content", body);
+                        obj.Add("title", title);
+
+                        body = Html.Partial("~" + templatePath, node, obj).ToString();
+                    }
+                 
+                    @Html.Raw(HttpUtility.HtmlDecode(body))
+                }
+
+                if (controlType == "uEditMedia")
+                {
+                                
+                    string mediaId = control.GetValue<string>("item");
+                    bool hasMedia = false;
+                    IPublishedContent media = null;
+                                
+                    if (!String.IsNullOrEmpty(mediaId)) {
+                        media = Umbraco.TypedMedia(mediaId);
+                                    
+                        if (media != null) {
+                            hasMedia = true;
+                        }
+                    }
+                                             
+                    if (hasMedia) {
+                    
+                        string title = control.GetValue<string>("title");
+                        string description = control.GetValue<string>("description");
+                                  
+                        if (!string.IsNullOrEmpty(templatePath))
+                        {
+                            var obj = new ViewDataDictionary();
+
+                            obj.Add("name", media.Name);
+                            obj.Add("media", media.Url);
+                            obj.Add("title", title);
+                            obj.Add("description", description);
+
+                            @Html.Partial("~" + templatePath, node, obj)
+
+                        } else {
+                            <img src="@media.Url" alt="@title"/>
+                        }
+                                    
+                    }
+                                
+                }
+
+                if (controlType == "uEditMacro")
+                {
+                    if (!string.IsNullOrEmpty(control.GetValue<string>("macro"))) {
+
+                        string macro = control.GetValue<string>("macro");
+                                    
+                        string macroContent = umbraco.library.RenderMacroContent(macro,Model.pageId);
+                                        
+                        @Html.Raw(macroContent)
+
+                    } 
+                                
+                }
+
+                if (controlType == "uEditGrid")
+                {
+
+                    string controlId = control.GetValue<string>("controlId");
+                    string _columns = control.GetValue<string>("columns");
+                    var Class = control.GetValue<string>("class");                               
+                                                        
+                    string[] cols = _columns.Split(';');
+
+                    int c = 0;
+                                                    
+                    string columns = "";
+                                                        
+                    foreach (var col in cols) {
+
+                        if (!string.IsNullOrEmpty(col)) {
+
+     
+                            var colNumber = col.Split(':')[0];
+                            var screen = col.Split(':')[1];
+                            var config = col.Split(':')[2];
+
+                            string areaAlias = "grid-" + colNumber + "-" + controlId + "-" + c;
+                                        
+                            columns += "<div class='col-" + screen + "-" + colNumber + " " + config + "'>" +
+                                RenderFrontEndControls(areaAlias, node) +
+                                "</div>";
+
+                            c++;
+         
+                        }
+                                                        
+                    }
+
+                    c = 0;
+                                                        
+                    string row = "<div class='row " + Class + "'>" + columns + "</div>";
+                                                        
+                    if (!string.IsNullOrEmpty(templatePath))
+                    {
+                        var obj = new ViewDataDictionary();
+
+                        obj.Add("columns", cols);
+                        obj.Add("class", Class);
+
+                        foreach (var col in cols)
+                        {
+
+                            if (!string.IsNullOrEmpty(col))
+                            {
+                                                                                                      
+                                var colNumber = col.Split(':')[0];
+                                var screen = col.Split(':')[1];
+                                var config = col.Split(':')[2];
+
+                                string areaAlias = "grid-" + colNumber + "-" + controlId + "-" + c;
+
+                                obj.Add("column" + c, RenderFrontEndControls(areaAlias, node));
+
+                                c++;
+                                                                    
+                            }
+
+                        }
+
+                        row = Html.Partial("~" + templatePath,node,obj).ToString();
+                    }
+                                
+                    @Html.Raw(HttpUtility.HtmlDecode(row))
+                            
+                }
+
+                if (controlType == "uEditSection")
+                {
+    
+                    string body = "";
+
+                    string Class = control.GetValue<string>("class");
+
+                    string areaAlias = "section-" + control.GetValue<string>("controlid");
+
+                    string mediaId = control.GetValue<string>("item");
+                    string imageUrl = "";
+                                                        
+                    bool hasMedia = false;
+                    IPublishedContent media = null;
+
+                    if (!String.IsNullOrEmpty(mediaId))
+                    {
+                        media = Umbraco.TypedMedia(mediaId);
+
+                        if (media != null)
+                        {
+                            imageUrl = media.Url;
+                        }
+                    }
+                                                        
+                    body = "<section class='" + Class + "' " + (!string.IsNullOrEmpty(imageUrl) ? "style=background-image:url(" + imageUrl + ");" : "") + " >" +
+                        "<div class='container'>" +
+                        RenderFrontEndControls(areaAlias, node) +
+                        "</div>" +
+                        "</section>";
+                                                        
+                    if (!string.IsNullOrEmpty(templatePath))
+                    {
+                        var obj = new ViewDataDictionary();
+
+                        obj.Add("class", Class);
+                        obj.Add("media", imageUrl);
+                        obj.Add("area", RenderFrontEndControls(areaAlias, node));
+
+                        body = Html.Partial("~" + templatePath, node, obj).ToString();
+                    }
+                                
+                    @Html.Raw(HttpUtility.HtmlDecode(body))
+    
+            
+                }
+                
+                if (controlType == "uEditHeading")
+                {
+                    string body = "";
+                    string Class = control.GetValue<string>("class");
+                    string title = control.GetValue<string>("title");
+                    string heading = control.GetValue<string>("columns");
+                               
+                    if (string.IsNullOrEmpty(heading))
+                    {
+                        heading = "h4";
+                    }
+
+                    if (string.IsNullOrEmpty(title))
+                    {
+                        body = "<div class='uEdit-heading-placeholder'>No title set</div>";
+                    }
+                    else
+                    {
+                        body = "<" + heading + " class='" + Class + "'>" + title + "</" + heading + ">";
+                    }
+                                                       
+
+                    if (!string.IsNullOrEmpty(templatePath))
+                    {
+                        var obj = new ViewDataDictionary();
+
+                        obj.Add("class", Class);
+                        obj.Add("title", title);
+                        obj.Add("heading", heading);
+                        
+                        body = Html.Partial("~" + templatePath, node, obj).ToString();                           
+
+                    }
+                                
+                    @Html.Raw(HttpUtility.HtmlDecode(body))
+                    
+                }
+
+                if (controlType == "uEditButton")
+                {
+                    string body = "";
+                    string Class = control.GetValue<string>("class");
+                    string title = control.GetValue<string>("title");
+                    string icon = control.GetValue<string>("columns");
+                    string url = control.GetValue<string>("description");
+
+                    string iconContent = "";
+
+                    if (!string.IsNullOrEmpty(icon)) {
+                        iconContent = "<i class='" + icon + "'></i>";
+                    }
+                                                        
+                    if (string.IsNullOrEmpty(title))
+                    {
+                        body = "<div class='uEdit-button-placeholder'>No title set</div>";
+                    } else {
+                        body = "<a href='" + url + "' class='" + Class + "'>" + iconContent + title + "</a>";
+                    }
+                                                        
+                    if (!string.IsNullOrEmpty(templatePath))
+                    {
+                        var obj = new ViewDataDictionary();
+
+                        obj.Add("class", Class);
+                        obj.Add("title", title);
+                        obj.Add("icon", icon);
+                        obj.Add("url", url);
+
+                        body = Html.Partial("~" + templatePath, node, obj).ToString(); 
+                    }
+                                
+                    @Html.Raw(HttpUtility.HtmlDecode(body))
+                }
+                 
+            }
+            
+        }
+        
+    }
+    
+}

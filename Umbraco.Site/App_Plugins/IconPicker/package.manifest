@@ -1,0 +1,22 @@
+﻿{
+    propertyEditors: [
+        {
+                alias: "Hunang.IconPicker",
+                name: "Hunang: Icon Picker",
+                editor: {
+                view: "~/App_Plugins/IconPicker/iconpicker.html"
+                },
+                prevalues: {
+                        fields: [
+                               
+                        ]
+                }
+        }
+    ],
+    javascript: [
+        "~/App_Plugins/IconPicker/iconpicker.controller.js"
+    ],
+	css: [
+		"~/App_Plugins/IconPicker/css/addon-icons.css"
+	]
+}

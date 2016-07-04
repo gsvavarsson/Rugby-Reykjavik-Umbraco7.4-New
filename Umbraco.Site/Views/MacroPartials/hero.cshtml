@@ -1,0 +1,76 @@
+@inherits Umbraco.Web.Macros.PartialViewMacroPage
+
+@{
+	var slideContainer = Model.MacroParameters["slideParent"];
+	var container = Umbraco.TypedContent(2106);
+	var children = container.Children();
+
+	int count = 0;
+	int pos = 0;
+	int mobileCount = 0;
+	int mobilePos = 0;
+	string slideTimer = container.GetPropertyValue("slideDelay").ToString();
+	var i = 0;
+}
+
+<div class="slidering-desktop frontpage-slides" data-timer="@slideTimer">
+	<div class="carousel-inner">
+
+		<ol class="carousel-indicators list-unstyled">
+			@foreach (var child in children)
+			{	
+				var active = "";
+				if (i == 0)  {
+					active = "active";
+				}
+				<li data-target="#carousel-example-generic" data-slide-to="@i" class="@active"></li>
+				i++;
+			}
+		</ol>
+		
+		@foreach (var child in children)
+		{
+			count++;
+			pos++;
+
+			@* TYPE AND CLASSES *@
+			string type = (child.DocumentTypeAlias == "ImageSlide" ? "image" : "video");
+			string classType = (type == "image" ? "slider-image" : "slider-video");
+
+			@* MEDIA *@
+			int media = child.GetPropertyValue<int>("media");
+			
+			string mediaUrl = "";
+			if (Umbraco.TypedMedia(media) != null) {
+				mediaUrl = Umbraco.TypedMedia(media).Url;
+			}
+			
+			@* TEXT *@
+			string text = child.GetPropertyValue<string>("headline");
+            string text2 = child.GetPropertyValue<string>("subHeadline");
+
+			<div class="item slide @classType @(pos == 1 ? "first current" : "")" data-type="@type" data-slide="@count" style="background-image: url(@mediaUrl?width=1920&mode=crop&quality=80&format=jpg); background-size: cover; background-position: top center; background-repeat: no-repeat;">
+			
+				@if (type == "video")
+				{
+					<div class="video-bg">
+						<video id="bgvid" poster="" autoplay loop>
+							<source src="@mediaUrl" type="video/mp4">
+						</video>
+
+					</div>
+				}
+
+				<div class="contain caption-plate">
+					<div class="carousel-caption">
+						<h1>@text</h1>
+                        <h1>@text2</h1>
+						<a href="#" class="scroll-down"><i class="icon-download-1"></i></a>
+					</div>
+				</div>
+			</div>
+		}
+
+	</div>
+
+</div>

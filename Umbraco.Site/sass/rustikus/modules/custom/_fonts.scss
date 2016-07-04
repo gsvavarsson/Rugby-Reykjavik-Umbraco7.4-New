@@ -1,0 +1,190 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: $icon-font;
+  src:url("/fonts/rugby.eot");
+  src:url("/fonts/rugby.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/rugby.woff") format("woff"),
+    url("/fonts/rugby.ttf") format("truetype"),
+    url("/fonts/rugby.svg#rugby") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: $icon-font !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: $icon-font !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bars:before {
+  content: "\61";
+}
+.icon-angle-down:before {
+  content: "\62";
+}
+.icon-angle-left:before {
+  content: "\63";
+}
+.icon-angle-right:before {
+  content: "\64";
+}
+.icon-angle-up:before {
+  content: "\65";
+}
+.icon-camera:before {
+  content: "\66";
+}
+.icon-beer:before {
+  content: "\67";
+}
+.icon-heart:before {
+  content: "\68";
+}
+.icon-globe:before {
+  content: "\69";
+}
+.icon-airport-plane:before {
+  content: "\6a";
+}
+.icon-america-football:before {
+  content: "\6b";
+}
+.icon-dot-circle-o:before, .icon-Game:before {
+  content: "\6c";
+}
+.icon-compass:before {
+  content: "\6d";
+}
+.icon-map-marker:before {
+  content: "\6e";
+}
+.icon-map-signs:before {
+  content: "\6f";
+}
+.icon-thumbs-o-up:before {
+  content: "\70";
+}
+.icon-thumbs-o-down:before {
+  content: "\71";
+}
+.icon-users:before {
+  content: "\72";
+}
+.icon-megaphone:before, .icon-Blog:before {
+  content: "\73";
+}
+.icon-calendar:before {
+  content: "\74";
+}
+.icon-align-justify:before {
+  content: "\75";
+}
+.icon-vallet:before {
+  content: "\76";
+}
+.icon-chart:before {
+  content: "\77";
+}
+.icon-clock:before {
+  content: "\78";
+}
+.icon-contact:before {
+  content: "\79";
+}
+.icon-doc:before {
+  content: "\7a";
+}
+.icon-earth:before {
+  content: "\41";
+}
+.icon-hi:before {
+  content: "\42";
+}
+.icon-home:before {
+  content: "\43";
+}
+.icon-lightbulb:before {
+  content: "\44";
+}
+.icon-player:before {
+  content: "\45";
+}
+.icon-puzzle:before {
+  content: "\46";
+}
+.icon-rugby:before {
+  content: "\47";
+}
+.icon-user:before {
+  content: "\48";
+}
+.icon-facebook-square:before {
+  content: "\49";
+}
+.icon-twitter-square:before {
+  content: "\4a";
+}
+.icon-social-snapchat:before {
+  content: "\4b";
+}
+.icon-instagram:before {
+  content: "\4c";
+}
+.icon-envelope-o:before {
+  content: "\4d";
+}
+.icon-exclamation-triangle:before {
+  content: "\4e";
+}
+.icon-ios-arrow-right:before {
+  content: "\4f";
+}
+.icon-ios-arrow-left:before {
+  content: "\50";
+}
+.icon-ios-arrow-down:before {
+  content: "\51";
+}
+.icon-ios-arrow-up:before {
+  content: "\52";
+}
+.icon-plane:before, .icon-Trip:before {
+  content: "\53";
+}
+.icon-angellist:before, .icon-Social:before {
+  content: "\54";
+}
+.icon-ios-chatboxes-outline:before, .icon-Meeting:before {
+  content: "\55";
+}
+.icon-newspaper-o:before, .icon-News:before {
+  content: "\56";
+}
+.icon-pencil-square-o:before, .icon-Article:before {
+  content: "\57";
+}
+.icon-quote-right:before {
+  content: "\58";
+}

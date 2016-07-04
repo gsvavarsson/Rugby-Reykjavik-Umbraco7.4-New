@@ -1,0 +1,40 @@
+@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using umbraco.MacroEngines
+@using umbraco.NodeFactory;
+
+@{
+	var media = Model.MacroParameters["media"];
+	string mediaUrl = (media != null ? Umbraco.TypedMedia(media).Url : "");
+
+	string title = (string)Model.MacroParameters["welcomeTitle"];
+	string text = (string)Model.MacroParameters["welcomeText"];
+}
+
+<!-- start: THE SEARCH -->
+<div id="the-search" class="search-hero" style="background-image:url(@mediaUrl?width=1920);">
+	<div class="inner">
+		<div class="search-wrap">
+			@if (!String.IsNullOrEmpty(title) && !String.IsNullOrEmpty(text))
+			{
+				<div class="hero-message">
+					@if (!String.IsNullOrEmpty(title))
+					{
+						<h1 class="no-margin-top">@title</h1>
+					}
+
+					@if (!String.IsNullOrEmpty(text))
+					{
+						<p>@text</p>
+					}
+				</div>
+			}
+			<form id="frontpage-search-form" class="frontpage-search" method="get" action="/search" role="form">
+				<input type="text" id="frontpage-search-input" name="q" placeholder="Search events & venues" />
+				<button type="submit" id="frontpage-search-submit" class="frontpage-search-btn">
+					<i class="icon-search"></i>
+				</button>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- end: THE SEARCH -->

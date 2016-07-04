@@ -1,0 +1,133 @@
+/* PRINT STYLES
+---------------------------------------*/
+
+@media print {
+	
+	/* BASE - DO NOT TOUCH THIS! */
+
+	/* PAGE MARGINS */
+	/* @page :left {
+		margin: 0.1;
+	}
+	@page :right {
+		margin: 0;
+	} */
+
+	@page  
+	{
+		size: auto;   /* auto is the initial value */ 
+
+		/* this affects the margin in the printer settings */ 
+		// margin: 25mm 25mm 25mm 25mm;
+		margin: 0mm;
+	} 
+	
+
+	body {
+		background: #fff;
+		padding-top: 0;
+	}
+
+	img {
+		max-width: 500px;
+	}
+	
+	// TODO: ADD MORE BASE TAGS
+	header {
+		display: none;
+	}
+
+	/* START YOUR STYLES HERE
+	---------------------------------------*/
+	.help-trigger,
+	.help-menu,
+	.offer-menu,
+	.hero,
+	.uEdit-toggle,
+	.frontpage-top .three,
+	.frontpage-top .six,
+	.header-search,
+	.hashtag-section,
+	.image-section.form-section,
+	.offer-menu,
+	.mobile-menu,
+	.carosello,
+	.minar-sidur .title .btn,
+	.all-insurances,
+	.insurance-item .item-image,
+	.filters {
+		display: none !important;
+	}
+
+	.minar-sidur-base {
+		padding: 0 !important;
+	}
+
+	.box-insurance {
+		margin-bottom: 100mm !important;
+		height: 500px !important;
+	}
+
+	.frontpage-top .row {
+		margin: 0;
+	}
+	
+	.frontpage-top .four,
+	.frontpage-top .five {
+		background: #fff;
+
+		h1,h2,h3,h4,h5,h6,p {
+			color: $text-color;
+		}
+
+		&:after {
+			display: none;
+		}
+	}
+
+	.frontpage-top {
+
+		.two {
+			margin-top: 360px;
+
+			.btn {
+				color: $text-color;
+			}
+			.select-style {
+				min-width: auto;
+				width: 500px;
+
+				select {
+					min-width: auto;
+					width: 500px;
+				}
+			}
+		}
+	}
+
+	.frontpage-top .two,
+	.frontpage-top .four {
+		margin-left: -50px;
+	}
+
+	section {
+
+		&.section {
+			padding: 0;
+
+			&.section-alt {
+				background: #fff;
+			}
+		}
+	}
+	.insurance-section {
+		margin: 0;
+		margin-top: 400px;
+		padding: 0;
+		background: #fff;
+	}
+
+	.insurance-box {
+		height: auto;
+	}
+}

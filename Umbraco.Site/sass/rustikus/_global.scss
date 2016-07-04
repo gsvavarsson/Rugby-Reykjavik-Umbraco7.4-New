@@ -1,0 +1,174 @@
+/* GLOBAL
+---------------------------------------*/
+
+
+/* GLOBAL BOX-SIZING and IE7 SUPPORT */
+* {
+	@include box-sizing(border-box);
+
+	&:focus,
+	&:before,
+	&:after {
+		@include box-sizing(border-box);
+	}
+}
+
+html, body {
+	position: relative;
+}
+body {
+	font-family: $font-family !important;
+	font-size: $font-size-base !important;
+	line-height: $line-height-b;
+	color: $text-color;
+	position: relative;
+	-webkit-font-smoothing: subpixel-antialiased;
+	overflow-x: hidden;
+	font-size: $font-size;
+
+	&.no-scroll,
+	&.loading {
+		overflow: hidden !important;
+	}
+}
+
+a {
+	text-decoration: none;
+	color: $brand-primary;
+	@include transition(color 0.3s ease-in-out);
+
+	&:hover {
+		color: darken($brand-primary, 10%);
+		text-decoration: none;
+	}
+}
+
+ul {
+	margin: 0;
+}
+
+img {
+	line-height: 0;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	vertical-align: text-bottom;
+	max-width: 100%;
+}
+
+/* FLOATS */
+.pull-left {
+	float: left;
+}
+.pull-right {
+	float: right;
+}
+
+/* PARAGRAPH */
+p {
+	line-height: $line-height-b;
+
+	&.subtitle {
+		font-size: 22px;
+	}
+}
+
+/* HEADINGS */
+h1, h2, h3,h4, h5, h6 {
+	line-height: $line-height-s;
+	font-weight: normal;
+}
+
+/* INPUTS */
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+	@include appearance(none);
+	// height: 50px;
+	border: 1px solid $border-color;
+	background: #fff;
+	font-size: $font-size;
+	height: 48px;
+	padding: 6px 12px;
+
+}
+input[type="select"],
+input[type="number"] {
+	border: 1px solid $border-color;
+	background: #fff;
+	font-size: $font-size;
+	height: 48px;
+	padding: 6px 12px;
+}
+
+textarea {
+	resize: none;
+}
+
+label {
+	font-weight: normal;
+	cursor: pointer;
+	font-size: $font-size;
+}
+
+
+/* IFRAME */
+iframe {
+	max-width: 100%;
+}
+
+/* BUTTONS */
+button {
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	border: 0;
+	@include appearance(none);
+	@include transition(background 0.3s ease-in-out);
+}
+
+/* NO GUTTER GRID
+------------------------------------*/
+.row {
+
+	&.no-gutter {
+		margin-right: 0;
+		margin-left: 0;
+
+		[class*="col-"], [class*=" col-"] {
+			padding-right: 0;
+			padding-left: 0;
+		}
+	}
+}
+
+/* BOLD */
+.bold {
+	font-weight: $bold;
+}
+
+// SCREEN READER ONLY
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	border: 0;
+}
+
+// LIST STYLES
+.list-style {
+	@include list-style();
+}
+
+// HIDDEN
+.hide {
+	display: none;
+}
+
+.on-canvas {
+	left: 0;
+}

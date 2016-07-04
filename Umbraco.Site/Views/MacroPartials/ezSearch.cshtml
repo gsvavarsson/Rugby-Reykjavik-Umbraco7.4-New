@@ -1,0 +1,242 @@
+@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models
+@using Examine
+@using Examine.SearchCriteria
+@using UmbracoExamine
+@using System.Text.RegularExpressions
+
+@{
+	string query = Request.QueryString["q"];
+	string searchFor = Request.QueryString["criteria"];
+
+
+	if (String.IsNullOrEmpty(query))
+	{
+		query = "";
+	}
+}
+
+@if (query.Length >= 2)
+{
+
+	string searchTerms = Umbraco.StripHtml((Request.QueryString["q"]).Replace(":", " ").Replace(" - ", " ").ToLower()).ToString();
+
+	var homeNode = Model.Content.AncestorOrSelf(1);
+
+	IEnumerable<IPublishedContent> contentResult = homeNode.Search(searchTerms, true, "ExternalSearcher").Where(c => c.ItemType == PublishedItemType.Content);
+
+	var searcher = ExamineManager.Instance.SearchProviderCollection["ExternalSearcher"];
+	var criteria = searcher.CreateSearchCriteria();
+	var criteria2 = criteria.RawQuery(searchTerms);
+
+
+	int contentCount = contentResult.Count();
+
+	if (contentCount == 0)
+	{
+		@RenderEmpty();
+	}
+	else
+	{
+		@RenderContent(contentResult, query, (searchFor == "content" || contentCount < 4 ? true : false))
+	}
+
+
+}
+else
+{
+
+	@RenderEmpty()
+
+}
+
+@helper RenderContent(IEnumerable<IPublishedContent> contentResult, string query, bool allContent)
+{
+
+	if (contentResult.Any())
+	{
+
+		<h3 class="no-margin-top">Search results for <strong>"@query"</strong> @*[@contentResult.Count()]*@</h3>
+
+		var content = (allContent ? contentResult : contentResult.Take(4));
+
+		<div class="row">
+
+			@foreach (var node in content)
+			{
+				//string searchGrid = "col-lg-3 col-md-6 col-sm-6";
+
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					@if (node.DocumentTypeAlias == "Event")
+					{
+						string title = node.GetPropertyValue("eventTitle").ToString();
+						string date = node.GetPropertyValue("eventDate").ToString();
+						//DateTime date = DateTime.ParseExact(child.GetPropertyValue("eventDate").ToString(), @"M\/d\/yyyy", null);
+						string price = node.GetPropertyValue("eventPrice").ToString();
+						var venue = (node.HasValue("eventVenue") ? node.GetPropertyValue("eventVenue") : "");
+						string venueName = (node.HasValue("eventVenue") ? Umbraco.TypedContent(venue).Name : "");
+
+						var media = node.GetPropertyValue("eventImage");
+						var mediaUrl = Umbraco.TypedMedia(media).Url();
+
+
+						<div class="event-tile" style="background-image:url(@mediaUrl);" data-link="@node.Url">
+
+							<a href="@node.Url" class="tile-trigger tile-link"><i class="icon-onnow"></i></a>
+
+							<div class="tile-top">
+								<a href="@node.Url" class="tile-title tile-link">@title</a>
+								<a href="@node.Url" class="tile-date tile-link">
+									<i class="icon-calendar"></i>
+									@date
+								</a>
+							</div>
+
+							<div class="tile-bottom">
+								@if (price != "0")
+								{
+									<a href="@node.Url" class="tile-price tile-link">
+										<i class="icon-ticket"></i>
+										@price
+										<span class="price-attachment">kr.</span>
+									</a>
+								}
+
+								@if (venueName != "")
+								{
+									<a href="@node.Url" class="tile-venue tile-link">
+										<i class="icon-home"></i>
+										@venueName
+									</a>
+								}
+								<a href="" class="tile-favorite" data-tooltip="Add to my list"><i class="icon-star-empty"></i></a>
+							</div>
+
+						</div>
+					}
+
+					@if (node.DocumentTypeAlias == "Venue")
+					{
+						<a href="@node.Url">Venue @node.Name</a>
+					}
+					@if (node.DocumentTypeAlias == "Artist")
+					{
+						<a href="@node.Url">Venue @node.Name</a>
+					}
+				</div>
+			}
+
+		</div>
+
+		if (!allContent)
+		{
+			<div class="row">
+				<div class="col-md-12  col-margin-small">
+					<a href="/search?q=@query&criteria=content" class="btn btn-info pull-right">  Sjá meira </a>
+				</div>
+			</div>
+		}
+
+	}
+}
+
+@helper RenderEmpty()
+{
+
+	<h2 class="no-margin-top">No Results found, please try again.</h2>
+	<div class=" box box-white box-sm">
+		<form method="get" action="/search" role="form">
+			<input type="search" name="q" placeholder="Search..." value="" class="">
+			<button type="submit" class="btn-search">Leita</button>
+		</form>
+	</div>
+}
+
+@functions {
+
+	public string summary { get; set; }
+
+	public string GetSummaryFromuEdit(ArchetypeModel model)
+	{
+
+		summary = "";
+
+		if (model != null)
+		{
+
+			string mainArea = "bodyArea";
+
+			LoopControls(mainArea, model);
+
+		}
+
+		return summary;
+
+	}
+
+	public void LoopControls(string alias, ArchetypeModel model)
+	{
+
+		var areaFieldset = model.Where(x => x.GetValue<string>("alias") == alias).FirstOrDefault();
+
+		if (areaFieldset != null)
+		{
+
+			var controls = areaFieldset.GetValue<ArchetypeModel>("controls");
+
+			foreach (var control in controls)
+			{
+
+				if (control.GetValue<string>("type") == "uEditText" || control.GetValue<string>("type") == "uEditRichtext")
+				{
+
+					summary = control.GetValue<string>("content");
+
+				}
+
+				if (string.IsNullOrEmpty(summary) && control.GetValue<string>("type") == "uEditGrid")
+				{
+					string _columns = control.GetValue<string>("columns");
+					string[] cols = _columns.Split(';');
+					string controlId = control.GetValue<string>("controlId");
+
+					int c = 0;
+
+					foreach (var col in cols)
+					{
+
+						if (!string.IsNullOrEmpty(col))
+						{
+
+							var colNumber = col.Split(':')[0];
+							var screen = col.Split(':')[1];
+							var config = col.Split(':')[2];
+
+							string areaAlias = "grid-" + colNumber + "-" + controlId + "-" + c;
+
+							c++;
+
+							LoopControls(areaAlias, model);
+
+
+						}
+
+					}
+
+
+				}
+
+				if (string.IsNullOrEmpty(summary) && control.GetValue<string>("type") == "uEditSection")
+				{
+					string areaAlias = "section-" + control.GetValue<string>("controlid");
+
+					LoopControls(areaAlias, model);
+				}
+
+			}
+
+		}
+
+	}
+
+}

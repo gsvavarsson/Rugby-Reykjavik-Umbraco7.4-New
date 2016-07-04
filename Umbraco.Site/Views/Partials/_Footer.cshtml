@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+    var settingsNode = Umbraco.TypedContent(2086);
+    string pageName = ((string)settingsNode.GetPropertyValue("pageName") != "" ? (string)settingsNode.GetPropertyValue("pageName") : "[Page Name]");
+    string pageEmail = ((string)settingsNode.GetPropertyValue("pageEmail") != "" ? (string)settingsNode.GetPropertyValue("pageEmail") : "[Page Email]");
+}
+
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<p class="no-margin">Copyright 2016 @pageName - <a href="mailto:@pageEmail">@pageEmail</a></p>
+			</div>
+		</div>
+	</div>
+</footer>

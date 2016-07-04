@@ -1,0 +1,9 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = null;
+
+    if (Model.Content.HasValue("externalLinkUrl"))
+    {
+        Response.Redirect(Model.Content.GetPropertyValue<string>("externalLinkUrl"));
+    }
+}

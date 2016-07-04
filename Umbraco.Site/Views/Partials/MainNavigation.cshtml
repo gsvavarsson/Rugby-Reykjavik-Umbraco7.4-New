@@ -1,0 +1,80 @@
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{ 
+	var home = CurrentPage.Site(); 
+	
+	var mediaFolderID = home.GetPropertyValue<string>("menuImage").ToString();
+	var mediaItems = Umbraco.Media(mediaFolderID);
+	var mediaCount = mediaItems.ChildrenAsList.Count();
+	var mediaUrl = "";
+
+	Random r = new Random();
+	int randomNumber = r.Next(1,mediaCount);
+
+	int i = 0;
+	if (mediaItems != null) {
+		foreach (var mediaItem in mediaItems.Children) {
+			if (i == randomNumber) {
+				mediaUrl = Umbraco.TypedMedia(mediaItem.Id).Url;
+			}
+			i++;
+		}
+	}
+}
+
+@if (home.Children.Any())
+{
+
+	@* Get the first page in the children *@
+	var naviLevel = home.Children.First().Level;
+	
+	@* Add in level for a CSS hook *@
+	<div class="navigation">
+		<div class="navi">
+			<ul class="level-@naviLevel">
+				@* For each child page under the home node *@
+				@foreach (var childPage in home.Children.Where("visible"))
+				{
+					string icon = "icon-" + childPage.GetPropertyValue<string>("customIconClass");
+					var photoUrl = (!string.IsNullOrEmpty(childPage.GetPropertyValue<string>("menuImage"))) ? Umbraco.TypedMedia(childPage.GetPropertyValue("menuImage")) : "";
+
+					<li class="@(childPage.IsAncestorOrSelf(CurrentPage) ? "selected" : null)">
+						<a href="@childPage.Url">
+							<i class="@icon"></i>
+							<span>@childPage.Name</span>
+						</a>
+						@childPages(childPage.Children)
+					</li>
+					<span class="menu-bgr-image" style="background-image: url('/media/1089/topgradient.png'), url('@photoUrl.Url?width=1920&mode=crop');"></span>
+				}
+			</ul>
+		</div>
+	</div>
+	<div class="bgr-image" style="background-image: url('@mediaUrl?width=1920&mode=crop');"></div>
+}
+
+@helper childPages(dynamic pages)
+{
+	@* Ensure that we have a collection of pages *@
+	if (pages.Any())
+	{
+		@* Get the first page in pages and get the level *@
+		var naviLevel = pages.First().Level;
+		
+		@* Add in level for a CSS hook *@
+		<ul class="sublevel level-@(naviLevel)">
+			@foreach (var page in pages)
+			{
+				<li>
+					<a href="@page.Url">@page.Name</a>
+					
+					@* if the current page has any children *@
+					@if (page.Children.Any())
+					{
+						@* Call our helper to display the children *@
+						@childPages(page.Children)
+					}
+				</li>
+			}
+		</ul>
+	}
+}

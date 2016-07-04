@@ -1,0 +1,77 @@
+/* RESPONSIVE TABLES
+---------------------------------------*/
+
+@media only screen and (max-width: 800px) {
+    .responsive-table {
+        tr {
+            margin-bottom: 10px;
+            padding: 15px;
+            &.hover {
+                background-color: inherit !important;
+                color: inherit !important;
+            }
+            &.selected {
+                background-color: inherit !important;
+                color: inherit !important;
+            }
+        }
+        td {
+            width: 100% !important;
+        }
+    }
+    .visible-table-cell-xs {
+        display: block !important;
+    }
+    .hide-inline {
+        display: none !important;
+    }
+    /* Force table to not be like tables anymore */
+    .responsive-table table,
+    .responsive-table thead,
+    .responsive-table tbody,
+    .responsive-table th,
+    .responsive-table td,
+    .responsive-table tr {
+        display: block;
+    }
+    .responsive-table tr {
+        border: 1px solid #eaeaea;
+    }
+    /* Hide table headers (but not display: none;, for accessibility) */
+    .responsive-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    //.responsive-table tr { border: 1px solid #ccc; }
+    .responsive-table td {
+        /* Behave  like a "row" */
+        border: none;
+        //border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 30%;
+        @media (max-width: 400px) {
+            padding-left: 35%;
+        }
+        white-space: normal;
+        text-align: left;
+    }
+    .responsive-table td:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 11px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+    }
+    /*
+    Label the data
+    */
+    .responsive-table td:before {
+        content: attr(data-title);
+    }
+}

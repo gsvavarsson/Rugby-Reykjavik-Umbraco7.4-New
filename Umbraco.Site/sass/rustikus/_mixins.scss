@@ -1,0 +1,366 @@
+/* MIXINS - RUSTIKUS
+---------------------------------------*/
+
+/* PRIMARY GRADIENT */
+@mixin bg-gradient($type) {
+	@if $type == 1 {
+		background: $brand-primary; /* Old browsers */
+		background: -moz-linear-gradient(left,  $brand-primary 0%, $brand-secondary 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(left,  $brand-primary 0%,$brand-secondary 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to right,  $brand-primary 0%,$brand-secondary 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$brand-primary', endColorstr='$brand-secondary',GradientType=1 ); /* IE6-9 */
+	}
+}
+@mixin gradient-transparent($rgba, $type) {
+
+	@if $type == 1 {
+		background: $rgba; /* Old browsers */
+		background: -moz-linear-gradient(top,  $rgba 0%, transparent 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top,  $rgba 0%, transparent 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom,  $rgba 0%, transparent 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$rgba', endColorstr='transparent',GradientType=1 ); /* IE6-9 */
+	} @else if $type == 2 {
+		background: $rgba; /* Old browsers */
+		background: -moz-linear-gradient(top,  transparent 0%, $rgba 100%); /* FF3.6-15 */
+		background: -webkit-linear-gradient(top,  transparent 0%, $rgba 100%); /* Chrome10-25,Safari5.1-6 */
+		background: linear-gradient(to bottom,  transparent 0%, $rgba 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='transparent', endColorstr='$rgba',GradientType=0 ); /* IE6-9 */
+	}
+}
+
+
+@mixin material-shadow($level) {
+	@if $level == 1 {
+		box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	} @else if $level == 2 {
+		box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	} @else if $level == 3 {
+		box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	} @else if $level == 4 {
+		box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+	} @else if $level == 5 {
+		box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+	}
+}
+
+@mixin calc($property, $val) {
+	#{$property}: -webkit-calc(#{$val});
+	#{$property}: calc(#{$val});
+}
+
+// WIDTH AND HEIGHT
+@mixin wh($val1, $val2) {
+	width: $val1;
+	height: $val2;
+}
+
+@mixin border-radius($val) {
+	-webkit-border-radius: $val;
+	   -moz-border-radius: $val;
+		-ms-border-radius: $val;
+		 -o-border-radius: $val;
+			border-radius: $val;
+}
+// BOX SHADOW
+@mixin box-shadow($val) {
+	-webkit-box-shadow: $val;
+	   -moz-box-shadow: $val;
+		-ms-box-shadow: $val;
+		 -o-box-shadow: $val;
+			box-shadow: $val;
+}
+// TEXT SHADOW
+@mixin text-shadow($val) {
+	-webkit-text-shadow: $val;
+	   -moz-text-shadow: $val;
+			text-shadow: $val;
+}
+
+/* LISTS
+------------------------------------- */
+// RESET UL AND OL
+@mixin reset-list() {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+// LIST STYLE
+@mixin list-style() {
+	// margin-top: 20px !important;
+	list-style: none;
+	padding: 0;
+	padding-left: 13px;
+
+	li {
+		text-indent: -1em;
+		padding: 0;
+		line-height: 34px;
+
+		&:before {
+			content: "\2022 ";
+			color: $brand-primary;
+			margin-right: 7px;
+		}
+	}
+}
+
+
+/* MISC
+------------------------------------- */
+// BOX-SIZING
+@mixin box-sizing($val) {
+	-webkit-box-sizing: $val;
+	   -moz-box-sizing: $val;
+		-ms-box-sizing: $val;
+		 -o-box-sizing: $val;
+			box-sizing: $val;
+}
+// TRANSITIONS
+@mixin transition($val) {
+	-webkit-transition: $val;
+	   -moz-transition: $val;
+		-ms-transition: $val;
+		 -o-transition: $val;
+			transition: $val;
+}
+@mixin transition-timing($val) {
+	-webkit-transition-timing-function: $val;
+	   -moz-transition-timing-function: $val;
+		-ms-transition-timing-function: $val;
+		 -o-transition-timing-function: $val;
+			transition-timing-function: $val;
+}
+@mixin transition-delay($val) {
+	-webkit-transition-delay: $val;
+	   -moz-transition-delay: $val;
+		-ms-transition-delay: $val;
+		 -o-transition-delay: $val;
+			transition-delay: $val;
+}
+// APPEARANCE
+@mixin appearance($val) {
+	-webkit-appearance: $val;
+	   -moz-appearance: $val;
+		-ms-appearance: $val;
+		 -o-appearance: $val;
+			appearance: $val;
+}
+// INPUT STYLES
+@mixin input-style() {
+	border: 1px solid $border-color;
+	background: #fff;
+	color: #aaa;
+}
+
+/* TRANSFORMS
+------------------------------------- */
+@mixin skew($val1, $val2) {
+	-webkit-transform: skew($val1, $val2);
+	   -moz-transform: skew($val1, $val2);
+		-ms-transform: skew($val1, $val2);
+		 -o-transform: skew($val1, $val2);
+			transform: skew($val1, $val2);
+}
+
+/* TRNSLATE */
+@mixin translate($val1, $val2) {
+	-webkit-transform: translate($val1, $val2);
+	   -moz-transform: translate($val1, $val2);
+		-ms-transform: translate($val1, $val2);
+		 -o-transform: translate($val1, $val2);
+			transform: translate($val1, $val2);
+}
+@mixin translateX($val) {
+	-webkit-transform: translateX($val);
+	   -moz-transform: translateX($val);
+		-ms-transform: translateX($val);
+		 -o-transform: translateX($val);
+			transform: translateX($val);
+}
+@mixin translateY($val) {
+	-webkit-transform: translateY($val);
+	   -moz-transform: translateY($val);
+		-ms-transform: translateY($val);
+		 -o-transform: translateY($val);
+			transform: translateY($val);
+}
+/* SCALE */
+@mixin scale($val) {
+	-webkit-transform: scale($val);
+	   -moz-transform: scale($val);
+		-ms-transform: scale($val);
+		 -o-transform: scale($val);
+			transform: scale($val);
+}
+/* ROTATE */
+@mixin rotate($val) {
+	-webkit-transform: rotate($val);
+	   -moz-transform: rotate($val);
+		-ms-transform: rotate($val);
+		 -o-transform: rotate($val);
+			transform: rotate($val);
+}
+
+
+/* OPACITY */
+@mixin opacity($val, $ie) {
+	opacity: $val;
+	filter: alpha(opacity=$ie);
+}
+
+
+/* MEDIA QUERIES
+----------------------------------*/
+@mixin desktop-xxxl {
+	@media #{$desktop-xxxl} {
+		@content;
+	}
+}
+@mixin desktop-xxl {
+	@media #{$desktop-xxl} {
+		@content;
+	}
+}
+@mixin desktop-xl {
+	@media #{$desktop-xl} {
+		@content;
+	}
+}
+@mixin desktop-lg {
+	@media #{$desktop-lg} {
+		@content;
+	}
+}
+@mixin desktop-sm {
+	@media #{$desktop-sm} {
+		@content;
+	}
+}
+@mixin tablet {
+	@media #{$tablet} {
+		@content;
+	}
+}
+@mixin phone-md {
+	@media #{$phone-md} {
+		@content;
+	}
+}
+@mixin phone-sm {
+	@media #{$phone-sm} {
+		@content;
+	}
+}
+@mixin watch {
+	@media #{$watch} {
+		@content;
+	}
+}
+@mixin handheld {
+	@media #{$handheld} {
+		@content;
+	}
+}
+
+
+/* ANIMATION
+----------------------------------*/
+@mixin animation($val) {
+	-webkit-animation: $val;
+	   -moz-animation: $val;
+		-ms-animation: $val;
+		 -o-animation: $val;
+			animation: $val;
+}
+@mixin animation-delay($val) {
+	-webkit-animation-delay: $val;
+	   -moz-animation-delay: $val;
+		-ms-animation-delay: $val;
+		 -o-animation-delay: $val;
+			animation-delay: $val;
+}
+@mixin animation-fill-mode($val) {
+	-webkit-animation-fill-mode: $val;
+	   -moz-animation-fill-mode: $val;
+		-ms-animation-fill-mode: $val;
+		 -o-animation-fill-mode: $val;
+			animation-fill-mode: $val;
+}
+
+/* FORMS STYLES
+----------------------------------*/
+@mixin input-style() {
+	background: #fff;
+	height: 42px;
+	border: 1px solid $border-color;
+	padding: 0 16px;
+	font-size: $font-size;
+}
+
+@mixin select-style() {
+	background: #fff;
+	height: 42px;
+	border: 1px solid $border-color;
+	padding: 0 16px;
+	font-size: $font-size;
+}
+
+
+// Aspect ratio
+@mixin aspect-ratio($width, $height) {
+	position: relative;
+	display: block;
+	content: "";
+	width: 100%;
+	padding-top: ($height / $width) * 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50% 0%;
+	> * {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		right: 0;
+		bottom: 0;
+		@include translate(-50%, -50%);
+	}
+}
+
+/* BOOTSTRAP MIXINS
+----------------------------------*/
+// Utilities
+@import "mixins/hide-text";
+@import "mixins/opacity";
+@import "mixins/image";
+@import "mixins/labels";
+@import "mixins/reset-filter";
+@import "mixins/resize";
+@import "mixins/responsive-visibility";
+@import "mixins/size";
+@import "mixins/tab-focus";
+@import "mixins/text-emphasis";
+@import "mixins/text-overflow";
+@import "mixins/vendor-prefixes";
+
+// Components
+@import "mixins/alerts";
+@import "mixins/buttons";
+@import "mixins/panels";
+@import "mixins/pagination";
+@import "mixins/list-group";
+@import "mixins/nav-divider";
+@import "mixins/forms";
+@import "mixins/progress-bar";
+@import "mixins/table-row";
+
+// Skins
+@import "mixins/background-variant";
+@import "mixins/border-radius";
+@import "mixins/gradients";
+
+// Layout
+@import "mixins/clearfix";
+@import "mixins/center-block";
+@import "mixins/nav-vertical-align";
+@import "mixins/grid-framework";
+@import "mixins/grid";

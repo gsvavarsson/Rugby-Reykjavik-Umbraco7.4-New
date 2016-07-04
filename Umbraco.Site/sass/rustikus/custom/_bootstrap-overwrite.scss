@@ -1,0 +1,126 @@
+/* BOOTSTRAP OVERWRITES
+---------------------------------------*/
+
+
+.btn {
+	text-transform: uppercase;
+	font-size: 14px;
+	@include border-radius(2px);
+	@include transition(all 0.3s ease-in-out);
+	&.btn-sm {
+
+	}
+
+	&.btn-primary {
+		border-color: $brand-primary;
+
+		&:hover {
+			border-color: darken($brand-primary, 5%);
+		}
+	}
+
+	&.chevron-left, &.angle-right {
+		padding-right: 30px;
+		position: relative;
+		&:after {
+			font-family: $icon-font;
+			content: "d";
+			font-size: 22px;
+			text-transform: none !important;
+			position: absolute;
+			top: 49%;
+			right: 4px;
+			@include translate(0%, -50%);
+		}
+	}
+
+	&.btn-outline {
+		border-color: $brand-primary;
+		color: $brand-primary;
+		background-color: rgba($brand-primary, 0);
+		&:hover {
+			background-color: rgba($brand-primary, 1);
+			color: $white;
+		}
+		&.outline-white {
+			border-color: $white;
+			color: $white;
+			background-color: rgba($white, 0);
+			&:hover {
+				background-color: rgba($white, 1);
+				color: $brand-primary;
+			}
+		}
+	}
+
+	&.btn-yellow {
+		background: $brand-warning;
+		border-color: $brand-warning;
+		color: #fff;
+
+		&:hover {
+			background-color: darken($brand-warning, 5%);
+		}
+	}
+
+	&.btn-success {
+		border-color: $brand-success;
+
+		&:hover {
+			border-color: darken($brand-success, 5%);
+		}
+	}
+	&.btn-danger {
+		border-color: $brand-danger;
+
+		&:hover {
+			border-color: darken($brand-danger, 5%);
+		}
+	}
+	&.btn-info {
+		border-color: $brand-info;
+
+		&:hover {
+			border-color: darken($brand-info, 5%);
+		}
+	}
+	&.btn-warning {
+		border-color: $brand-warning;
+
+		&:hover {
+			border-color: darken($brand-warning, 5%);
+		}
+	}
+
+	&.btn-white {
+		border-color: #fff;
+		background-color: #fff;
+		color: $text-color;
+
+		&:hover {
+			border-color: darken(#fff, 10%);
+			background-color: darken(#fff, 10%);
+			color: $text-color;
+		}
+	}
+
+	&.btn-gray {
+		border-color: $gray-light;
+		background-color: $gray-light;
+		color: #fff;
+
+		&:hover {
+			border-color: darken($gray-light, 10%);
+			background-color: darken($gray-light, 10%);
+			color: #fff;
+		}
+	}
+}
+
+.form-control {
+
+	&:focus {
+		outline: none;
+		@include box-shadow(0 0 0 0);
+	}
+}

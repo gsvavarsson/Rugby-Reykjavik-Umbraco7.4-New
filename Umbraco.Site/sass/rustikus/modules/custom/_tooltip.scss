@@ -1,0 +1,18 @@
+/* TOOLTIPS
+---------------------------------------*/
+
+
+a[data-tooltip]:hover:after {
+    content: attr(data-tooltip);
+    padding: 6px 12px;
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    white-space: nowrap;
+    z-index: 9999;
+    background: $brand-primary;
+    color: $white;
+    font-size: 16px;
+
+    @include translateX(-50%);
+}

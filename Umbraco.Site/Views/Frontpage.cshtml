@@ -1,0 +1,15 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Globalization;
+@{
+    Layout = "Master.cshtml";
+}
+
+@section Header {
+    @Html.Partial("_Header")
+}
+
+@uEdit.Helper.Render("bodyArea", Model.Content.Id, this.Html, CultureInfo.CurrentCulture.Name)
+
+@section Footer {
+    @Html.Partial("_Footer")
+}

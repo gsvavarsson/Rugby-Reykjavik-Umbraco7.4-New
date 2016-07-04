@@ -1,0 +1,48 @@
+.fp-newest-articles {
+	@extend .article-item;
+}
+
+
+.article-item {
+	.art-image {
+		@include aspect-ratio(290, 220);
+	}
+	.event-info {
+		padding-bottom: 15px;
+		border-bottom: solid 2px $border-color;
+		h3 {
+			width: 100%;
+			height: 75px;
+			overflow: hidden;
+		}
+		.text {
+			height: 110px;
+			overflow: hidden;
+		}
+		.type {
+			padding-right: 10px;
+			padding-top: 1px;
+			position: relative;
+			&:hover {
+				&:after {
+					opacity: 1;
+					z-index: map-get($zindex, default);
+				}
+			}
+			&:after {
+				opacity: 0;
+				z-index: map-get($zindex, behind);
+				position: absolute;
+				content: attr(data-type);
+				top: -33px;
+				background: darken($white, 1%);
+				border-radius: $border-radius;
+				border: solid 1px $primary-light;
+				padding: 2px 14px;
+				left: 50%;
+				@include transition(all 0.3s ease-in-out);
+				@include translate(-30%, 0%);
+			}
+		}
+	}
+}

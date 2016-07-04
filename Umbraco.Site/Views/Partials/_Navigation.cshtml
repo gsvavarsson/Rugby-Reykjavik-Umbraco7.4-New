@@ -1,0 +1,70 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+    IPublishedContent cModel = ViewData["Model"] as IPublishedContent;
+    int startNodeId;
+    bool hasStartNode = int.TryParse(ViewData["startNode"].ToString(), out startNodeId);
+
+    int startLevel = int.Parse(ViewData["startLevel"].ToString());
+    int endLevel = int.Parse(ViewData["endLevel"].ToString());
+
+    string cssClass = "";
+
+    IPublishedContent parent = (hasStartNode) ? Umbraco.TypedContent(startNodeId) : (startLevel == 0) ? Model.Content : Model.Content.AncestorOrSelf(startLevel);
+
+    if (parent != null)
+    {
+        <nav class="main-nav clearfix">
+            @traverse(parent, startLevel, endLevel, 1, cssClass, cModel)
+        </nav>
+    }
+}
+
+@helper traverse(IPublishedContent parent, int startLevel, int endLevel, int level, string cssClass, IPublishedContent cModel) { 
+    
+    int pos = 0;
+    
+    IEnumerable<IPublishedContent> children = parent.Children.Where(x => x.IsVisible()).OrderBy(x => x.SortOrder);
+
+    if (children.Any())
+    {
+        int count = children.Count();
+
+        <ul>
+            @foreach (IPublishedContent node in children)
+            {
+                pos++;
+
+                string[] path = (!string.IsNullOrEmpty(cModel.Path)) ? cModel.Path.Split(',') : new string[1];
+                int isInCurrentPath = Array.IndexOf(path, node.Id.ToString());
+
+                string liClass = (isInCurrentPath >= 0) ? "active pos" + pos : "pos" + pos;
+
+                string target = (node.DocumentTypeAlias == "ExternalLink") ? "_blank" : "_self";
+
+                string hasChildren = (node.Level <= endLevel && node.Children.Where(x => x.IsVisible()).Count() > 0 ? "data-children=true" : "");
+
+                string firstLastPos = "";
+                if (pos == 1) {
+                    firstLastPos = "data-first=true";
+                } else if (pos == count) {
+                    firstLastPos = "data-last=true";
+                }
+
+                <li class="@liClass" @firstLastPos  @hasChildren>
+                    <a href="@node.Url" target="@target" data-name="@node.UrlName">
+                        <span data-text="@node.Name">@node.Name</span>
+                    </a>
+
+                    @if (node.Level <= endLevel && node.Children.Where(x => x.IsVisible()).Count() > 0)
+                    {
+                        <div class="subnav-wrap">
+                            @traverse(node, startLevel, endLevel, 2, cssClass, cModel)
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    
+}

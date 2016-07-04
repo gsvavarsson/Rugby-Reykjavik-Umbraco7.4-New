@@ -1,0 +1,426 @@
+﻿@inherits UmbracoViewPage<uEdit.Models.uEditModels.View>
+@using Umbraco.Core.Services;
+@using Archetype.Models
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@using System.Text.RegularExpressions;
+
+@RenderControlsInArea(Model.alias,Model.pageId,Model.loggedIn, Model.page)
+
+@helper RenderControlsInArea(string alias, int pageId, bool loggedIn,IContent page)
+{
+
+    if (page != null)
+    {
+        string archeJson = page.GetValue<string>("uEdit");
+        
+        var arche = JsonConvert.DeserializeObject<uEdit.Models.ArchetypeModel>(archeJson);
+       
+        if (arche != null) {
+
+            foreach (var fieldset in arche.Fieldsets)
+            {
+                var area = fieldset.Properties.Take(1).FirstOrDefault();
+                    
+                if (area.Value == alias) {
+                    
+                    var controls = fieldset.Properties.Skip(1).Take(1).FirstOrDefault();
+                    
+                    <div class="uEdit-area" data-area="@alias" data-pageId="@pageId">
+                    
+                        @if (controls != null) {
+
+                            var controlsSet = JsonConvert.DeserializeObject<uEdit.Models.ArchetypeModel>(controls.Value);
+
+                            if (controlsSet.Fieldsets.Where(x => !string.IsNullOrEmpty(x.Properties.Where(z => z.Alias == "type").FirstOrDefault().Value)).Any()) {
+                            
+                                foreach (var controlFieldset in controlsSet.Fieldsets)
+                                {
+
+                                    var controlType = controlFieldset.Properties.Where(x => x.Alias == "type").FirstOrDefault().Value;
+                                
+                                    if (!string.IsNullOrEmpty(controlType)) {
+                                
+                                        var template = controlFieldset.Properties.Where(x => x.Alias == "template").FirstOrDefault();
+                                        var controlId = controlFieldset.Properties.Where(x => x.Alias == "controlid").FirstOrDefault();
+                                        
+                                        if (controlId == null)  {
+                                            continue;
+                                        }
+                                
+                                        string templatePath = string.Empty;
+
+                                        if (!string.IsNullOrEmpty(template.Value))
+                                        {
+
+                                            if (System.IO.File.Exists(Server.MapPath(template.Value)))
+                                            {
+                                                templatePath = template.Value;
+                                            }
+
+                                        }
+                                
+                                        <div class="uEdit-control" data-controlId="@controlId.Value" data-controlType="@controlType">
+                                            <div class="uEdit-control-actions">
+                                                <a href="#" class="uEdit-action-edit">Edit</a>
+                                                <a href="#" class="uEdit-action-delete">Delete</a>
+                                                <a href="#" class="uEdit-action-move">Move</a>
+                                            </div>
+
+                                            <div class="uEdit-control-content">
+
+                                                @{
+                                                    /*** uEdit Grid Control ***/
+                                                    if (controlType == "uEditGrid") {
+
+                                                        string _columns = controlFieldset.Properties.Where(x => x.Alias == "columns").FirstOrDefault().Value;
+                                                        var classObj = controlFieldset.Properties.Where(x => x.Alias == "class").FirstOrDefault();
+                                                        string Class = "";
+                                                        
+                                                        if (classObj != null) {
+                                                            Class = classObj.Value;
+                                                        }
+                                                        
+                                                        string[] cols = _columns.Split(';');
+
+                                                        int c = 0;
+                                                    
+                                                        string columns = "";
+                                                        
+                                                        foreach (var col in cols) {
+
+                                                            if (!string.IsNullOrEmpty(col)) {
+
+     
+                                                                var colNumber = col.Split(':')[0];
+                                                                var screen = col.Split(':')[1];
+                                                                var config = col.Split(':')[2];
+
+                                                                string areaAlias = "grid-" + colNumber + "-" + controlId.Value + "-" + c;
+                                        
+                                                                columns += "<div class='col-" + screen + "-" + colNumber + " " + config + "'>" +
+                                                                    RenderControlsInArea(areaAlias,pageId,loggedIn,page) +
+                                                                    "</div>";
+
+                                                                c++;
+         
+                                                            }
+                                                        
+                                                        }
+
+                                                        c = 0;
+                                                        
+                                                        string row = "<div class='row " + Class + "'>" + columns + "</div>";
+                                                        
+                                                        if (!string.IsNullOrEmpty(templatePath))
+                                                        {
+                                                            var obj = new ViewDataDictionary();
+
+                                                            obj.Add("columns", cols);
+                                                            obj.Add("class", Class);
+
+                                                            foreach (var col in cols)
+                                                            {
+
+                                                                if (!string.IsNullOrEmpty(col))
+                                                                {
+                                                                    
+                                                                    
+                                                                    var colNumber = col.Split(':')[0];
+                                                                    var screen = col.Split(':')[1];
+                                                                    var config = col.Split(':')[2];
+
+                                                                    string areaAlias = "grid-" + colNumber + "-" + controlId.Value + "-" + c;
+
+                                                                    obj.Add("column" + c, RenderControlsInArea(areaAlias, pageId, loggedIn, page));
+
+                                                                    c++;
+                                                                    
+                                                                }
+
+                                                            }
+                                                            
+
+                                                            row = Html.Partial("~" + templatePath,page,obj).ToString();
+                                                        }
+                                
+                                                        @Html.Raw(HttpUtility.HtmlDecode(row))
+                                                    
+                                                    }
+                                                    
+                                                    /*** uEdit Richtext/Text Control ***/
+                                                    if (controlType == "uEditRichtext" || controlType == "uEditText")
+                                                    {
+                                                        string body = controlFieldset.Properties.Where(x => x.Alias == "content").FirstOrDefault().Value;
+                                                        string title = controlFieldset.Properties.Where(x => x.Alias == "title").FirstOrDefault().Value;
+                                
+                                                        if (string.IsNullOrEmpty(body)) {
+                                                            body = "Write content here...";
+                                                        }
+
+                                                        if (controlType == "uEditText")
+                                                        {
+                                                            body = body.Replace(Environment.NewLine, "<br/>");
+                                                        }
+
+                                                        if (!string.IsNullOrEmpty(templatePath))
+                                                        {
+                                                            var obj = new ViewDataDictionary();
+
+                                                            obj.Add("content", body);
+                                                            obj.Add("title", title);
+
+                                                            body = Html.Partial("~" + templatePath,page,obj).ToString();
+                                                        }
+                                
+                                                        @Html.Raw(HttpUtility.HtmlDecode(body))
+                                                    }
+                                                    
+                                                    /*** uEdit Heading Control ***/
+                                                    if (controlType == "uEditHeading")
+                                                    {
+                                                        string body = "";
+                                                        string Class = controlFieldset.Properties.Where(x => x.Alias == "class").FirstOrDefault().Value;
+                                                        string title = controlFieldset.Properties.Where(x => x.Alias == "title").FirstOrDefault().Value;
+                                                        string heading = controlFieldset.Properties.Where(x => x.Alias == "columns").FirstOrDefault().Value;
+
+                                                        
+                                                        if (string.IsNullOrEmpty(heading))
+                                                        {
+                                                            heading = "h4";
+                                                        }
+
+                                                        if (string.IsNullOrEmpty(title))
+                                                        {
+                                                            body = "<div class='uEdit-heading-placeholder'>No title set</div>";
+                                                        }
+                                                        else
+                                                        {
+                                                            body = "<" + heading + " class='" + Class + "'>" + title + "</" + heading + ">";
+                                                        }
+                                                       
+
+                                                        if (!string.IsNullOrEmpty(templatePath))
+                                                        {
+                                                            var obj = new ViewDataDictionary();
+
+                                                            obj.Add("class", Class);
+                                                            obj.Add("title", title);
+                                                            obj.Add("heading", heading);
+                                                            
+                                                            body = Html.Partial("~" + templatePath,page,obj).ToString();
+                                                        }
+                                
+                                                        @Html.Raw(HttpUtility.HtmlDecode(body))
+                                                    }
+                                                    
+                                                    /*** uEdit Heading Control ***/
+                                                    if (controlType == "uEditButton")
+                                                    {
+                                                        string body = "";
+                                                        string Class = controlFieldset.Properties.Where(x => x.Alias == "class").FirstOrDefault().Value;
+                                                        string title = controlFieldset.Properties.Where(x => x.Alias == "title").FirstOrDefault().Value;
+                                                        string icon = controlFieldset.Properties.Where(x => x.Alias == "columns").FirstOrDefault().Value;
+                                                        string url = controlFieldset.Properties.Where(x => x.Alias == "description").FirstOrDefault().Value;
+
+                                                        string iconContent = "";
+
+                                                        if (!string.IsNullOrEmpty(icon)) {
+                                                            iconContent = "<i class='" + icon + "'></i>";
+                                                        }
+                                                        
+                                                        if (string.IsNullOrEmpty(title))
+                                                        {
+                                                            body = "<div class='uEdit-button-placeholder'>No title set</div>";
+                                                        } else {
+                                                            body = "<a href='" + url + "' class='" + Class + "'>" + iconContent + title + "</a>";
+                                                        }
+                                                        
+                                                        if (!string.IsNullOrEmpty(templatePath))
+                                                        {
+                                                            var obj = new ViewDataDictionary();
+
+                                                            obj.Add("class", Class);
+                                                            obj.Add("title", title);
+                                                            obj.Add("icon", icon);
+                                                            obj.Add("url", url);
+                                                            
+                                                            body = Html.Partial("~" + templatePath,page,obj).ToString();
+                                                        }
+                                
+
+                                                        @Html.Raw(HttpUtility.HtmlDecode(body))
+                                                    }
+                            
+                                                    /*** uEdit Media Control ***/
+                            
+                                                    if (controlType == "uEditMedia") {
+
+                                                        string mediaId = controlFieldset.Properties.Where(x => x.Alias == "item").FirstOrDefault().Value;
+                                
+                                                        bool hasMedia = false;
+                                                        IPublishedContent media = null;
+
+                                                        if (!String.IsNullOrEmpty(mediaId))
+                                                        {
+                                                            media = Umbraco.TypedMedia(mediaId);
+
+                                                            if (media != null)
+                                                            {
+                                                                hasMedia = true;
+                                                            }
+                                                        }
+                                
+                                                        if (hasMedia) {
+
+                                                            string title = controlFieldset.Properties.Where(x => x.Alias == "title").FirstOrDefault().Value;
+                                                            string description = controlFieldset.Properties.Where(x => x.Alias == "description").FirstOrDefault().Value;
+
+                                                            if (!string.IsNullOrEmpty(templatePath))
+                                                            {
+                                                                var obj = new ViewDataDictionary();
+
+                                                                obj.Add("name", media.Name);
+                                                                obj.Add("media", media.Url);
+                                                                obj.Add("title", title);
+                                                                obj.Add("description", description);
+
+                                                                @Html.Partial("~" + templatePath,page, obj)
+
+                                                            } else {
+                                                                <img src="@media.Url" alt="@title"/>
+                                                            }
+                                    
+                                                        } else {
+                                                            <div class="uEdit-media-placeholder">No media set</div>
+                                                        }
+                                                    }
+
+                                                    /*** uEdit Macro Control ***/
+                            
+                                                    if (controlType == "uEditMacro") {
+                                
+                                                        string macroValue = controlFieldset.Properties.Where(x => x.Alias == "macro").FirstOrDefault().Value;
+                               
+                                                        if (!string.IsNullOrEmpty(macroValue))
+                                                        {
+                                                            
+                                                            Match match = Regex.Match(macroValue, "macroAlias=(\"[^<>\"]*\"|'[^<>']*'|w+)", RegexOptions.IgnoreCase);
+                                                            
+                                                            string macroAlias = match.Value.Replace("macroAlias=","").Replace("\"","");
+
+                                                            Regex ItemRegex = new Regex("(\\S+)=(\"[^<>\"]*\"|'[^<>']*'|w+)", RegexOptions.IgnoreCase);
+
+                                                            var parameters = new ViewDataDictionary();
+                                                            
+                                                            foreach (Match ItemMatch in ItemRegex.Matches(macroValue))
+                                                            {
+                                                                var tag = ItemMatch.Value.Split('=')[0];
+                                                                var value = ItemMatch.Value.Split('=')[1].Replace("\"", "");
+
+                                                                parameters.Add(tag, value);
+                                                            }
+                                                            
+                                                            
+                                                            @Umbraco.RenderMacro(macroAlias,parameters)
+ 
+
+                                                        } else {
+                                                            <div class="uEdit-macro-placeholder">
+                                                                No macro selected
+                                                            </div>
+                                                        }
+                                
+                                                    }
+                                                    
+                                                    /*** uEdit Section Control ***/
+                                                    if (controlType == "uEditSection")
+                                                    {
+
+                                                        string body = "";
+                                                        
+                                                        var classObj = controlFieldset.Properties.Where(x => x.Alias == "class").FirstOrDefault();
+                                                        string Class = "";
+
+                                                        if (classObj != null)
+                                                        {
+                                                            Class = classObj.Value;
+                                                        }
+
+                                                        string areaAlias = "section-" + controlId.Value;
+                                                        
+                                                        string mediaId = controlFieldset.Properties.Where(x => x.Alias == "item").FirstOrDefault().Value;
+                                                        string imageUrl = "";
+                                                        
+                                                        bool hasMedia = false;
+                                                        IPublishedContent media = null;
+
+                                                        if (!String.IsNullOrEmpty(mediaId))
+                                                        {
+                                                            media = Umbraco.TypedMedia(mediaId);
+
+                                                            if (media != null)
+                                                            {
+                                                                imageUrl = media.Url;
+                                                            }
+                                                        }
+                                                        
+                                                        body = "<section class='" + Class + "' " + (!string.IsNullOrEmpty(imageUrl) ? "style=background-image:url(" + imageUrl + ");" : "") + " >" +
+                                                            "<div class='container'>" +
+                                                            RenderControlsInArea(areaAlias,pageId,loggedIn,page) +
+                                                            "</div>" +
+                                                            "</section>";
+                                                        
+                                                        if (!string.IsNullOrEmpty(templatePath))
+                                                        {
+                                                            var obj = new ViewDataDictionary();
+
+                                                            obj.Add("class", Class);
+                                                            obj.Add("media", imageUrl);
+                                                            obj.Add("area", RenderControlsInArea(areaAlias, pageId, loggedIn, page));
+
+                                                            body = Html.Partial("~" + templatePath,page,obj).ToString();
+                                                        }
+                                
+                                                        @Html.Raw(HttpUtility.HtmlDecode(body))
+                                                        
+                                                    }
+                                                    
+                                                }
+
+                                            </div>
+
+                                            <span class="uEdit-border uEdit-border-top"></span>
+                                            <span class="uEdit-border uEdit-border-right"></span>
+                                            <span class="uEdit-border uEdit-border-bottom"></span>
+                                            <span class="uEdit-border uEdit-border-left"></span>
+                                        </div>
+                                    
+                                    }
+                                
+                                }       
+                                
+                            } else {
+                
+                                <div class="uEdit-placeholder">
+                                    Drag control here
+                                </div>
+                
+                            }
+                                            
+                        }
+
+                        <span class="uEdit-border uEdit-border-top"></span>
+                        <span class="uEdit-border uEdit-border-right"></span>
+                        <span class="uEdit-border uEdit-border-bottom"></span>
+                        <span class="uEdit-border uEdit-border-left"></span>
+
+                    </div>
+                }
+            }   
+            
+        }
+        
+    }
+    
+}

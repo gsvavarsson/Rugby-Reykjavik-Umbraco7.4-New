@@ -1,0 +1,38 @@
+/* HEADER
+---------------------------------------*/
+
+header {
+	position: fixed;
+	top: 0px;
+	z-index: map-get($zindex, header);
+	width: 100%;
+	height: 300px;
+	.logo {
+		position: absolute;
+		left: 20px;
+		top: 20px;
+		z-index: map-get($zindex, header);
+		@include transition(all 0.3s ease-in-out);
+		@include translate(0%, 0);
+		@at-root body.nav-open {
+			.logo {
+				@include translate(-50%, 0);
+			}
+			&.scrolled {
+				.logo {
+					@include scale(1);
+					@include calc(left, "50% - 115px");
+					top: 20px;
+				}
+			}
+		}
+	}
+
+	@at-root body.scrolled {
+		.logo {
+			left: -30px;
+			top: -60px;
+			@include scale(0.5);
+		}
+	}
+}

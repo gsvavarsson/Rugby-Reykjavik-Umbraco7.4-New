@@ -1,0 +1,65 @@
+/* MEDIA QUERY LABEL
+---------------------------------------*/
+
+body {
+
+	&:after {
+		content: "";
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		padding: 4px 10px;
+		font-size: 10px;
+		z-index: 9999;
+		text-transform: uppercase;
+		color: #fff;
+
+		@include desktop-xxl {
+			content: "Desktop XXL";
+			background: #34495e;
+		} // XXXL
+
+		@include desktop-xxl {
+			content: "Desktop XXL";
+			background: #1abc9c;
+		} // XXL
+
+		@include desktop-xl {
+			content: "Desktop XL";
+			background: #9c27b0;
+		} // XL
+
+		@include desktop-lg {
+			content: "Desktop LG";
+			background: #e51c23;
+		} // large
+
+		@include desktop-sm {
+			content: "Desktop SM";
+			background: #ff9800;
+		} // small
+
+		@include tablet {
+			content: "Tablet";
+			background: #009688;
+		} // tablet
+
+		@include phone-md {
+			content: "Phone MD";
+			background: #5677fc;
+		} // phone medium
+
+		@include phone-sm {
+			content: "Phone SM";
+			background: #ffeb3b;
+			color: #000;
+		} // phone small
+
+		@include watch {
+			content: "Watch";
+			background: #e91e63;
+			color: #fff;
+		} // watch
+	}
+
+} // END MEDIA QUERY LABEL

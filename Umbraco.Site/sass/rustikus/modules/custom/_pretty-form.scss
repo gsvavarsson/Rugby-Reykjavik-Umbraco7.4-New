@@ -1,0 +1,243 @@
+/* PRETTY FORMS
+---------------------------------------*/
+
+form.pretty-lady {
+
+	.form-group {
+
+	}
+	.form-control {
+		width: 100%;
+	}
+
+	.form-upper {
+		margin-left: -10px;
+		margin-bottom: 10px;
+
+		@include phone-md {
+			margin: 0;
+		}
+	}
+	.form-middle {
+		padding: 20px 0 0;
+		clear: both;
+	}
+}
+
+.pretty-check {
+	
+	.form-cluster {
+		position: relative;
+	}
+
+	label {
+		position: absolute;
+		top: 14px;
+		left: 17px;
+		font-size: 20px;
+		color: #999;
+		cursor: text;
+
+		@include transition(top 0.2s);
+
+		@include phone-md {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	.form-control {
+		float: none;
+		padding-right: 42px;
+	}
+
+	.label-active {
+		top: -34px;
+		color: $brand-dark;
+		font-family: $font-family;
+
+		@include tablet {
+			top: 14px;
+			left: 17px;
+			opacity: 0;
+			visibility: hidden;
+		}
+		@include phone-md {
+			top: 14px;
+			left: 17px;
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+}
+
+/* .pretty-check {
+	position: relative;
+	font-size: 14px;
+	cursor: pointer;
+	color: #fff;
+
+	.check {
+		display: block;
+		background: #fff;
+		width: 20px;
+		height: 20px;
+		float: left;
+		margin: 0px 11px 0 0;
+		@include border-radius(2px);
+	}
+
+	i {
+		position: absolute;
+		top: 2px;
+		left: 3px;
+		color: $brand-dark;
+		display: none;
+	}
+
+	input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		visibility: hidden;
+		opacity: 0;
+	}
+}
+ */
+
+
+.pretty-check {
+
+	/* Base for label styling */
+	label {
+		color: #fff;
+		margin: 0;
+		padding-top: 1px;
+		font-size: 19px;
+	}
+	[type="checkbox"]:not(:checked),
+	[type="checkbox"]:checked {
+		position: absolute;
+		left: -9999px;
+	}
+	[type="checkbox"]:not(:checked) + label,
+	[type="checkbox"]:checked + label {
+		position: relative;
+		padding-left: 35px;
+		cursor: pointer;
+	}
+
+	/* checkbox aspect */
+	[type="checkbox"]:not(:checked) + label:before,
+	[type="checkbox"]:checked + label:before {
+		content: '';
+		position: absolute;
+		left:0;
+		top: 2px;
+		width: 24px;
+		height: 24px;
+		background: #fff;
+
+		@include border-radius(2px);
+	}
+
+	/* checked mark aspect */
+	[type="checkbox"]:not(:checked) + label:after,
+	[type="checkbox"]:checked + label:after {
+		font-family: "vordur-golf";
+		content: "f";
+		position: absolute;
+		top: 0; 
+		left: 4px;
+		font-size: 14px;
+		color: #09ad7e;
+		
+		@include transition(all 0.2s ease-in-out);
+	}
+	/* checked mark aspect changes */
+	[type="checkbox"]:not(:checked) + label:after {
+		opacity: 0;
+		@include scale(0);
+	}
+	[type="checkbox"]:checked + label:after {
+		opacity: 1;
+		top: 4px;
+		left: 5px;
+		color: $brand-dark;
+
+		@include scale(1);
+	}
+	/* disabled checkbox */
+	[type="checkbox"]:disabled:not(:checked) + label:before,
+	[type="checkbox"]:disabled:checked + label:before {
+		box-shadow: none;
+		border-color: #bbb;
+		background-color: #ddd;
+	}
+	[type="checkbox"]:disabled:checked + label:after {
+		color: #999;
+	}
+	[type="checkbox"]:disabled + label {
+		color: #aaa;
+	}
+	/* accessibility */
+	[type="checkbox"]:checked:focus + label:before,
+	[type="checkbox"]:not(:checked):focus + label:before {
+		border: 1px dotted blue;
+	}
+
+	/* hover style just for information */
+	label:hover:before {
+		// border: 1px solid #4778d9!important;
+	}
+
+}
+
+
+
+
+
+/* VALIDATION */
+.form-group {
+	position: relative;
+	@include transition(all 0.3s ease-in-out);
+
+	&.success,
+	&.error {
+		&:after {
+			font-family: "vordur-golf";
+			position: absolute;
+			right: 14px;
+			top: 16px;
+			font-size: 18px;
+		}
+	}
+
+	&.success {
+
+		input[type="text"] {
+			border-color: $brand-success;
+		}
+		/* label {
+			color: $brand-success !important;
+		} */
+		&:after {
+			content: "f";
+			color: $brand-success;
+		}
+	}
+	&.error {
+
+		input[type="text"] {
+			border-color: $brand-danger;
+		}
+		/* label {
+			color: $brand-danger !important;
+		} */
+
+		&:after {
+			content: "p";
+			color: $brand-danger;
+		}
+	}
+}
