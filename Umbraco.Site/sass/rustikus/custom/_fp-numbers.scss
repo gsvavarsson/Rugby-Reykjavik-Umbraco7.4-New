@@ -1,0 +1,137 @@
+.numbers-games {
+	> div {
+		.number-game {
+			float: none;
+			max-width: 210px;
+			margin: 0 auto;
+			text-align: center;
+			color: $white;
+			.contain-icon {
+				color: $brand-primary;
+				background-color: $white;
+				border-radius: 50%;
+				width: 100px;
+				height: 100px;
+				display: inline-block;
+				position: relative;
+				i {
+					position: absolute;
+					left: 50%;
+					top: 50%;
+					@include translate(-50%, -50%);
+					font-size: 50px;
+					line-height: 0;
+				}
+			}
+		}
+		&:first-child {
+			.number-game {
+				float: left;
+			}
+		}
+		&:last-child {
+			.number-game {
+				float: right;
+			}
+		}
+	}
+}
+
+
+#loading {
+	width: 210px;
+	height: 210px;
+	margin: 30px auto;
+	position: relative;
+}
+
+.outer-shadow, .inner-shadow {
+	z-index: 4;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 100%;
+}
+
+.inner-shadow {
+	top: 50%;
+	left: 50%;
+	width: 90%;
+	height: 90%;
+	margin-left: -45%;
+	margin-top: -45%;
+	border-radius: 100%;
+	background-color: $primary-light;
+}
+.hold {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	clip: rect(0px, 210px, 210px, 105px);
+	border-radius: 100%;
+	background-color: lighten($primary-light, 4%);
+}
+
+.fill, .dot span {
+	background-color: $white;
+}
+
+.fill {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 100%;
+	clip: rect(0px, 105px, 210px, 0px);
+}
+
+.left .fill {
+	z-index: 1;
+	-webkit-animation: left 1s ease-in ;
+	-moz-animation: left 1s ease-in ;
+	animation: left 1s ease-in both;  
+}
+
+@keyframes left {
+	0% { -webkit-transform:rotate(0deg); }
+	100% { transform:rotate(180deg); }
+}
+
+@-webkit-keyframes left {
+	0% { -webkit-transform:rotate(0deg); }
+	100% { -webkit-transform:rotate(180deg); }
+}
+
+.right {
+	z-index: 3;
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.right .fill {
+	z-index: 3;
+	-webkit-animation: right 1s ease-out;
+	-moz-animation: right 1s ease-out;
+	animation: right 1s ease-out both;
+	-webkit-animation-delay: 1s;
+	-moz-animation-delay: 1s;
+	animation-delay: 1s;
+}
+
+@keyframes right {
+	0%{-webkit-transform:rotate(0deg);}
+	100%{transform:rotate(180deg);}
+}
+
+@-webkit-keyframes right {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(180deg);
+	}
+}
+
+.inner-shadow img {
+	margin-left: 17px;margin-top: 15px;
+}
