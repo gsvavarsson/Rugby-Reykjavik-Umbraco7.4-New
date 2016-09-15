@@ -81,6 +81,7 @@ h1, h2, h3,h4, h5, h6 {
 
 /* INPUTS */
 input[type="text"],
+input[type="email"],
 input[type="password"],
 input[type="number"] {
 	@include appearance(none);
@@ -171,4 +172,8 @@ button {
 
 .on-canvas {
 	left: 0;
+}
+
+.full-width {
+	width: 100%;
 }

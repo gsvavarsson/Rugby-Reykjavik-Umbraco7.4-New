@@ -3,84 +3,84 @@
 @using ClientDependency.Core.Mvc
 
 @{
-    Layout = null;
+	Layout = null;
 
-    /* JS
-       concatenated and minified by Grunt
-    */
-    Html.RequiresJs("/scripts/libs/jquery-1.11.3.min.js");
-    Html.RequiresJs("/scripts/libs/equal-height.min.js");
-    Html.RequiresJs("/scripts/libs/moment.min.js");
-    Html.RequiresJs("/scripts/app/compiled.js");
+	/* JS
+	   concatenated and minified by Grunt
+	*/
+	Html.RequiresJs("/scripts/libs/jquery-1.11.3.min.js");
+	Html.RequiresJs("/scripts/libs/equal-height.min.js");
+	Html.RequiresJs("/scripts/libs/moment.min.js");
+	Html.RequiresJs("/scripts/app/app.js");
 
-    var bodyClass = (Model.Content.DocumentTypeAlias == "Frontpage" ? "frontpage" : "subpage");
-    string doctype = "doctype-" + Model.Content.DocumentTypeAlias.ToString().ToLower();
-    string pageId = "page-" + Model.Content.Id.ToString();
-    string pageName = "page-" + Model.Content.UrlName;
+	var bodyClass = (Model.Content.DocumentTypeAlias == "Frontpage" ? "frontpage" : "subpage");
+	string doctype = "doctype-" + Model.Content.DocumentTypeAlias.ToString().ToLower();
+	string pageId = "page-" + Model.Content.Id.ToString();
+	string pageName = "page-" + Model.Content.UrlName;
 
-    var settingsNode = Umbraco.TypedContent(2086);
+	var settingsNode = Umbraco.TypedContent(2086);
 
-    bool updateInProgress = settingsNode.GetPropertyValue<bool>("updateInProgress");
-    string updateClass = (updateInProgress ? "update-in-progress" : "");
+	bool updateInProgress = settingsNode.GetPropertyValue<bool>("updateInProgress");
+	string updateClass = (updateInProgress ? "update-in-progress" : "");
 }
 
 <!DOCTYPE html>
 <!--[if IE 8]>
-    <html id="ie8" lang="en-US">
+	<html id="ie8" lang="en-US">
 <![endif]-->
 <html>
 <head>
-    @* All meta tags are rendered in this partial*@
-    @Html.Partial("_Meta")
+	@* All meta tags are rendered in this partial*@
+	@Html.Partial("_Meta")
 
-    <!-- FAVICON -->
-    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon" />
-    <link href="/favicon.ico" type="image/x-icon" rel="icon">
+	<!-- FAVICON -->
+	<link href="/media/1022/favicon.png" type="image/x-icon" rel="shortcut icon" />
+	<link href="/media/1022/favicon.png" type="image/x-icon" rel="icon">
 
-    <!-- CSS -->
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/css/rustikus/rustikus.css" type="text/css" />
+	<!-- CSS -->
+	<link href='https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/css/rustikus/rustikus.css" type="text/css" />
 
-    <!--[if IE]>
-        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+	<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 
-    <script>
+	<script>
 		window.slimmage = { tryWebP: true, verbose: false };
-    </script>
+	</script>
 
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/mvc/5.1/jquery.validate.unobtrusive.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/mvc/5.1/jquery.validate.unobtrusive.min.js"></script>
 
-    <!-- RECAPTCHA -->
-    @*<script src='https://www.google.com/recaptcha/api.js'></script>*@
+	<!-- RECAPTCHA -->
+	@*<script src='https://www.google.com/recaptcha/api.js'></script>*@
 </head>
 
 <body class="@bodyClass @doctype @pageId @pageName @updateClass">
 
-    @if (updateInProgress)
-    {
-        <text>@Html.Partial("_PageUpdate")</text>
-    }
+	@if (updateInProgress)
+	{
+		<text>@Html.Partial("_PageUpdate")</text>
+	}
 
-    @RenderSection("Header", false)
+	@RenderSection("Header", false)
 
-    <main class="wrapper">
+	<main class="wrapper">
 
-        @RenderBody()
+		@RenderBody()
 
-        <div class="push"></div>
-    </main>
+		<div class="push"></div>
+	</main>
 
-    @RenderSection("Footer", false)
+	@RenderSection("Footer", false)
 
-    @Html.RenderJsHere()
-    @RenderSection("Scripts", false)
+	@Html.RenderJsHere()
+	@RenderSection("Scripts", false)
 
 
 
-    @uEdit.Helper.Build()
+	@uEdit.Helper.Build()
 
 </body>
 </html>

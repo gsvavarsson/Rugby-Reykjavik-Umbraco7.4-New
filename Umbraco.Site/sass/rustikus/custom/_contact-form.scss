@@ -1,0 +1,141 @@
+.contact-form {
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	padding-bottom: 50px;
+	input, textarea {
+		@include transition(opacity 0.3s ease-in-out);
+		width: 100%;
+		&.invalid {
+			animation: shake 0.42s cubic-bezier(.36,.07,.19,.97) both;
+			transform: translate3d(0, 0, 0);
+			backface-visibility: hidden;
+			perspective: 1000px;
+		}
+	}
+	textarea {
+		width: 100%;
+		height: 170px;
+		margin-top: $grid-gutter-width;
+		border-radius: 2px;
+		padding: 10px;
+		font-size: 16px;
+		font-family: $font-family;
+	}
+	.send-response {
+		position: absolute;
+		background: $brand-primary;
+		border-radius: 50%;
+		width: 80px;
+		height: 80px;
+		border: solid 2px $brand-primary;
+		bottom: 0;
+		left: 50%;
+		@include transition(all 0.3s ease-in-out);
+		//@include transition-delay(0.2s);
+		-webkit-transform: scale(1) translate(-50%, -14px);
+	   	   -moz-transform: scale(1) translate(-50%, -14px);
+			-ms-transform: scale(1) translate(-50%, -14px);
+		 	 -o-transform: scale(1) translate(-50%, -14px);
+				transform: scale(1) translate(-50%, -14px);
+		color: $white;
+		text-align: center;
+		.border {
+			border: solid 2px white;
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
+			display: block;
+			@include transition(all 0.3s ease-in-out);
+			@include transition-delay(0.2s);
+			a {
+				padding-top: 20px;
+				color: $white;
+				display: block;
+				height: 100%;
+				width: 100%;
+			}
+			> span {
+				display: none;
+				color: $white;
+			}
+			h2 {
+				display: none;
+				text-align: center;
+			}
+		}
+		.email-loader {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			background: $white;
+			z-index: 9999;
+			@include translate(-50%, -50%);
+			.email-loader-inner {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				@include translate(-50%, -50%);
+				@include spinner();
+				.spinner {
+					border-color: rgba(255, 255, 255, .25);
+					span {
+						border-top-color: $white;
+					}
+				}
+			}
+		}
+		&:hover {
+			-webkit-transform: scale(1.1) translate(-45%, -14px);
+			   -moz-transform: scale(1.1) translate(-45%, -14px);
+				-ms-transform: scale(1.1) translate(-45%, -14px);
+				 -o-transform: scale(1.1) translate(-45%, -14px);
+					transform: scale(1.1) translate(-45%, -14px);
+		}
+	}
+	&.sending, &.sent {
+		input, textarea {
+			opacity: .5;
+		}
+		.send-response {
+			width: 90%;
+			height: 90%;
+			border-radius: 2px;
+			.border {
+				border-radius: 2px;
+			}
+			a {
+				display: none;
+			}
+		}
+	}
+	&.sending {
+		.email-loader {
+			display: block !important;
+			opacity: 1;
+		}
+	}
+	&.sent {
+		h2 {
+			display: block !important;
+		}
+	}
+}
+
+@keyframes shake {
+	10%, 90% {
+		transform: translate3d(-1px, 0, 0);
+	}
+
+	20%, 80% {
+		transform: translate3d(2px, 0, 0);
+	}
+
+	30%, 50%, 70% {
+		transform: translate3d(-4px, 0, 0);
+	}
+
+	40%, 60% {
+		transform: translate3d(4px, 0, 0);
+	}
+}

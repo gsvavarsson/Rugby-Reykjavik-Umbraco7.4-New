@@ -13,11 +13,13 @@
 				width: 100px;
 				height: 100px;
 				display: inline-block;
+				z-index: 100;
+				top: 190px;
 				position: relative;
 				i {
 					position: absolute;
 					left: 50%;
-					top: 50%;
+					top: 38%;
 					@include translate(-50%, -50%);
 					font-size: 50px;
 					line-height: 0;

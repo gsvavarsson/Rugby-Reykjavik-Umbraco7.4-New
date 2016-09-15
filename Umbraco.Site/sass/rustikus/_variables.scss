@@ -32,10 +32,13 @@ $gray:                  #555 !default;
 	$gray-light:        #777 !default;
 	$gray-lighter:      #eee !default;
 
+$font-color: 			$gray-dark;
+
 $brand-primary:         #3570dc !default;
 	$primary-dark: 		darken($brand-primary, 5%) !default;
 	$primary-light: 	#77ade4 !default;
 	$primary-hover:		$primary-dark !default;
+$brand-gray: 			#1f2a32;
 $white:					darken(#fff, 5%);
 $brand-success:         #35dc83 !default;
 $brand-info:            #5bc0de !default;
@@ -61,8 +64,7 @@ $pinterest: 			#cc2127;
 $youtube: 				#cd201f;
 $linkedin: 				#0077b5;
 $vimeo: 				#1ab7ea;
-
-
+$snapchat: 				#fffc0;
 /* 
 	VARIABLES FOR MEDIA QUERIES.
 	

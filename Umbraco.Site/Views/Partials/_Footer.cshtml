@@ -1,13 +1,76 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 
 @{
-    var settingsNode = Umbraco.TypedContent(2086);
-    string pageName = ((string)settingsNode.GetPropertyValue("pageName") != "" ? (string)settingsNode.GetPropertyValue("pageName") : "[Page Name]");
-    string pageEmail = ((string)settingsNode.GetPropertyValue("pageEmail") != "" ? (string)settingsNode.GetPropertyValue("pageEmail") : "[Page Email]");
+	var settingsNode = Umbraco.TypedContent(2086);
+	string pageName = ((string)settingsNode.GetPropertyValue("pageName") != "" ? (string)settingsNode.GetPropertyValue("pageName") : "[Page Name]");
+	string pageEmail = ((string)settingsNode.GetPropertyValue("pageEmail") != "" ? (string)settingsNode.GetPropertyValue("pageEmail") : "[Page Email]");
+
+	@* Social *@
+	string facebookAlias = ((string)settingsNode.GetPropertyValue("facebookAlias") != "" ? (string)settingsNode.GetPropertyValue("facebookAlias") : "");
+	string youtubeAlias = ((string)settingsNode.GetPropertyValue("youtubeAlias") != "" ? (string)settingsNode.GetPropertyValue("youtubeAlias") : "");
+	string instagramAlias = ((string)settingsNode.GetPropertyValue("instagramAlias") != "" ? (string)settingsNode.GetPropertyValue("instagramAlias") : "");
+	string twitterAlias = ((string)settingsNode.GetPropertyValue("twitterAlias") != "" ? (string)settingsNode.GetPropertyValue("twitterAlias") : "");
+	string snapchatAlias = ((string)settingsNode.GetPropertyValue("snapchatAlias") != "" ? (string)settingsNode.GetPropertyValue("snapchatAlias") : "");
+	
 }
 
 <footer>
+	<div class="border-container container">
+		<div class="row">
+			<div class="col-xs-3"></div>
+			<div class="col-xs-3"></div>
+			<div class="col-xs-3"></div>
+			<div class="col-xs-3"></div>
+		</div>
+	</div>
 	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Eltu okkur!</h3>
+				<div class="row">
+					<div class="col-md-6 social">
+						@if (!String.IsNullOrEmpty(facebookAlias)) {
+							<a href="https://www.facebook.com/@facebookAlias" class="facebook full-width" target="_blank">
+								<span class="social-icon"><i class="icon-facebook"></i></span>
+								<span>@@@facebookAlias</span>
+							</a>
+						}
+						@if (!String.IsNullOrEmpty(youtubeAlias)) {
+							<a href="https://www.youtube.com/@youtubeAlias" class="youtube full-width" target="_blank">
+								<span class="social-icon"><i class="icon-youtube"></i></span>
+								<span>@@rugbyIsland</span>
+							</a>
+						}
+						@if (!String.IsNullOrEmpty(snapchatAlias)) {
+							<a href="#" class="snapchat full-width" target="_blank">
+								<span class="social-icon"><i class="icon-snapchat"></i></span>
+								<span>@snapchatAlias</span>
+							</a>
+						}
+					</div>
+					<div class="col-md-6 social">
+						@if (!String.IsNullOrEmpty(instagramAlias)) {
+							<a href="https://www.instagram.com/explore/tags/@instagramAlias" class="instagram full-width" target="_blank">
+								<span class="social-icon"><i class="icon-instagram"></i></span>
+								<span>#@instagramAlias</span>
+							</a>
+						}
+						@if (!String.IsNullOrEmpty(twitterAlias)) {
+							<a href="https://www.twitter.com/@twitterAlias" class="twitter full-width" target="_blank">
+								<span class="social-icon"><i class="icon-twitter"></i></span>
+								<span>@twitterAlias</span>
+							</a>
+						}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h3>Heyrðu í okkur</h3>
+				@Umbraco.RenderMacro("ContactForm", new {contactEmail="rfr@rfr.is"})
+			</div>
+		</div>
+	</div>
+	<div class="sub-footer">
 		<div class="row">
 			<div class="col-md-12">
 				<p class="no-margin">Copyright 2016 @pageName - <a href="mailto:@pageEmail">@pageEmail</a></p>

@@ -32,6 +32,7 @@
 @import "modules/custom/_hamburger.scss";
 @import "modules/custom/_navigation.scss";
 @import "modules/custom/_headings.scss";
+@import "modules/custom/_footer.scss";
 
 /* BOOTSTRAP OVERWRITE */
 @import "custom/_bootstrap-overwrite.scss";
@@ -40,14 +41,17 @@
 @import "_global.scss";
 
 /* CUSTOM */
+@import "custom/_social.scss";
 @import "custom/_notification-banner.scss";
 @import "custom/_custom-classes.scss";
 @import "custom/_events-container.scss";
 @import "custom/_article-container.scss";
 @import "custom/_quotes.scss";
 @import "custom/_header.scss";
+@import "custom/_contact-form.scss";
 @import "custom/_slider.scss";
 @import "custom/_fp-numbers.scss";
+@import "custom/_players.scss";
 
 
 /* PRINT STYLES */

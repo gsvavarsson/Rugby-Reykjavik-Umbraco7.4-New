@@ -3,8 +3,6 @@ app.numbersgame = {
 		var me = this;
 		var hasCountend = false;
 		// init controller
-
-
 			var controller = new ScrollMagic.Controller({globalSceneOptions: {duration: 100}});
 			
 			// build scenes
@@ -33,7 +31,7 @@ app.numbersgame = {
 								numAnim = new CountUp(this, 0, count, 0, 2.5, options);
 
 							numAnim.start();
-							//me.countup($(item).find('#number-input').val(), $(item).find('#number-unit').val());
+							////me.countup($(item).find('#number-input').val(), $(item).find('#number-unit').val());
 						});
 						hasCountend = true;
 					}

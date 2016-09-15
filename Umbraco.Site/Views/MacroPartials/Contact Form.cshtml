@@ -1,0 +1,33 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+
+<form>
+	<div class="contact-form contact-footer">
+		<div class="col-md-6">
+			<input type="text" placeholder="What's your name" id="contact_name" />
+		</div>
+		<div class="col-md-6 pull-right">
+			<input type="email" placeholder="Where should we email you?" id="contact_email" />
+		</div>
+		<div class="col-md-12">
+			<textarea placeholder="what do you want?" id="contact_msg"></textarea>
+		</div>
+		<div class="send-response">
+			<span class="border">
+				<a href="#" class="send-btn">Senda</a>
+				<span class="email-loader">
+					<div class="email-loader-inner">
+						<div class="spinner">
+							<span></span>
+							<span></span>
+						</div>
+						<div class="loader-logo">
+							<i class="icon-vordur-logo"></i>
+						</div>
+					</div>
+
+				</span>
+				<h2 class="response">Takk babe ;)</h2>
+			</span>
+		</div>
+	</div>
+</form>

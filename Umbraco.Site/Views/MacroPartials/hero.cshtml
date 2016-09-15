@@ -11,6 +11,7 @@
 	int mobilePos = 0;
 	string slideTimer = container.GetPropertyValue("slideDelay").ToString();
 	var i = 0;
+
 }
 
 <div class="slidering-desktop frontpage-slides" data-timer="@slideTimer">
@@ -47,7 +48,9 @@
 			
 			@* TEXT *@
 			string text = child.GetPropertyValue<string>("headline");
-            string text2 = child.GetPropertyValue<string>("subHeadline");
+			string text2 = child.GetPropertyValue<string>("subHeadline");
+			List<string> headlineAdd = child.GetPropertyValue<string>("headlineAdd").Split(',').ToList();
+			var addCount = 0;
 
 			<div class="item slide @classType @(pos == 1 ? "first current" : "")" data-type="@type" data-slide="@count" style="background-image: url(@mediaUrl?width=1920&mode=crop&quality=80&format=jpg); background-size: cover; background-position: top center; background-repeat: no-repeat;">
 			
@@ -63,8 +66,21 @@
 
 				<div class="contain caption-plate">
 					<div class="carousel-caption">
-						<h1>@text</h1>
-                        <h1>@text2</h1>
+						<h1 class="cd-headline rotate-1">
+							<span>@text</span>
+							<span class="cd-words-wrapper">
+								@foreach(string str in headlineAdd)
+								{
+									if (addCount == 0) {
+										<b class="is-visible">@str</b>
+									} else {
+										<b>@str</b>
+									}
+									addCount++;
+								}
+							</span>
+						</h1>
+						<h1>@text2</h1>
 						<a href="#" class="scroll-down"><i class="icon-download-1"></i></a>
 					</div>
 				</div>
