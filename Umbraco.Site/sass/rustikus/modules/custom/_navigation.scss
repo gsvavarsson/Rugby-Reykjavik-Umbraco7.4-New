@@ -193,5 +193,46 @@ nav {
 		background-size: 100% 80%, cover;
 		background-repeat: repeat-x, no-repeat;
 		@include transition(opacity 0.2s linear);
+		@include phone-md {
+			display: none !important;
+		}
+	}
+	@include phone-md {
+		.navigation {
+			background: rgba(0, 0, 0, 0.7);
+			.navi {
+				bottom: auto;
+				top: 90px;
+				height: auto;
+				> ul {
+					position: relative;
+					bottom: auto;
+					> li {
+						width: 100%;
+						position: relative;
+						padding: 20px 30px 0;
+						font-size: 25px;
+						left: 0px !important;
+						> ul {
+							opacity: 1;
+							position: relative;
+							> li {
+								position: relative;
+								left: 20px;
+								font-size: 20px;
+								background: none;
+								-webkit-transform: translate(0%, 0%) !important;
+									-ms-transform: translate(0%, 0%) !important;
+									 -o-transform: translate(0%, 0%) !important;
+										transform: translate(0%, 0%) !important;
+							}
+						}
+						&:hover {
+							background: none;
+						}
+					}
+				}
+			}
+		}
 	}
 }

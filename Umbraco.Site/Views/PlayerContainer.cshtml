@@ -2,3 +2,29 @@
 @{
 	Layout = "Master.cshtml";
 }
+
+@section Header {
+	@Html.Partial("_Header")
+}
+
+<div class="frontpage-container stories">
+	<div class="bgr-primary-gradient padding-top-100 padding-bottom-100 top-box-orange">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<div>
+						<h1 class="text-center">@CurrentPage.Name</h1>
+						<hr />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	@Umbraco.RenderMacro("Players", new {isFrontpage="0", startNodeId=""})
+</div>
+
+@section Footer {
+	@Html.Partial("_Footer")
+}

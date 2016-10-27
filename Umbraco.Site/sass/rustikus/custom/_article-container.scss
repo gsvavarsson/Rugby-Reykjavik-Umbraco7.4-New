@@ -1,11 +1,58 @@
 .fp-newest-articles {
 	@extend .article-item;
+	.article-item {
+		.art-image {
+			@include aspect-ratio(290, 220);
+		}
+	}
 }
+
+.sub-articles {
+	.article-item {
+		> div {
+			padding: 0;
+			position: relative;
+			.text-column {
+				position: absolute;
+				left: 100px;
+				right: auto;
+				top: 35px;
+				width: 56%;
+			}
+			@include tablet {
+				.text-column {
+					width: 70%;
+					left: 15%;
+					p {
+						display: none;
+					}
+				}
+			}
+			@include phone-md {
+				.text-column {
+					position: relative;
+					padding: 60px 0 80px;
+					top: 0;
+					left: 0;
+					right: 0;
+					margin: 0 auto;
+					float: none;
+					width: 70%;
+				}
+			}
+		}
+
+		&:first-of-type {
+			border-top: solid 1px $border-color;
+		}
+	}
+}
+
 
 
 .article-item {
 	.art-image {
-		@include aspect-ratio(290, 220);
+		@include aspect-ratio(290, 160);
 	}
 	.event-info {
 		padding-bottom: 15px;

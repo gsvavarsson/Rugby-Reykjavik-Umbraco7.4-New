@@ -1,0 +1,50 @@
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+
+	string nodeName = (Model.Content.HasValue("pageTitle")) ? Model.Content.GetPropertyValue<string>("pageTitle") : Model.Content.Name;
+
+	//the url
+	string siteUrl = "http://" + Request.ServerVariables["HTTP_HOST"];
+	string pageUrl = Model.Content.Url;
+	string fullUrl = siteUrl + pageUrl;
+
+
+	string documentType = Model.Content.DocumentTypeAlias;
+
+	//open graph image
+	string ogImageId = (Model.Content.HasValue("ogImage", true)) ? Model.Content.GetPropertyValue<string>("ogImage", true) : "";
+
+
+	if (!string.IsNullOrEmpty(ogImageId))
+	{
+		
+	}
+	string ogImageUrl = "http://fitsuccess.is/media/8542/font5.jpg?width=1920&mode=crop";
+	
+	if (!string.IsNullOrEmpty(ogImageId))
+	{
+		ogImageUrl = siteUrl + Umbraco.TypedMedia(ogImageId).Url;
+	}
+
+}
+<div class="social social-share">
+	<div class="social-inner">
+		<!--facebook-->
+
+		<!-- <a href="https://www.facebook.com/sharer.php?s=100&p%5Burl%5D=@fullUrl&p%5Bimages%5D%5B0%5D=@ogImageUrl&p%5Btitle%5D=@nodeName" class="facebook">Facebook</a> -->
+		<a href="https://www.facebook.com/sharer/sharer.php?u=@fullUrl" class="facebook popup">
+			<span class="social-icon"><i class="icon-facebook"></i></span>
+		</a>
+		<!-- <div style="vertical-align:top;" class="fb-like" data-href="@Model.Content.Url" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div> -->
+		<!-- pinterest-->
+	<!--						<a href="//www.pinterest.com/pin/create/button/" class="pinterest-share-button" data-pin-do="buttonBookmark" data-pin-color="red"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_red_20.png" /></a>
+
+		<script type="text/javascript" async defer src="//assets.pinterest.com/js/pinit.js"></script>
+		-->
+		<!--twitter-->
+		<a href="http://twitter.com/share?text=@nodeName&url=@fullUrl" class="twitter-share-button twitter popup">
+			<span class="social-icon"><i class="icon-twitter"></i></span>
+		</a>
+		<!--<script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>-->
+	</div>
+</div>

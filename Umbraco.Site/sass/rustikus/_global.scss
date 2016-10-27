@@ -177,3 +177,26 @@ button {
 .full-width {
 	width: 100%;
 }
+
+.hidden-phone-md {
+	@include phone-md {
+		display: none;
+	}
+}
+
+.fixed-background {
+	background-attachment: fixed !important;
+}
+
+.gray-bgr {
+	background-color: #eaebec;
+}
+
+.light-gray-bgr {
+	background-color: darken(white, 5%);
+}
+body.light-gray-bgr {
+	main {
+		background-color: #eaebec;
+	}
+}

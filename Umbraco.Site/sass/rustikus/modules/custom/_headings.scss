@@ -3,7 +3,13 @@
 	//padding-top: 65px;
 	padding-bottom: 15px;
 }
-.frontpage-hr {
+h1 {
+	@extend .frontpage-heading;
+	a {
+		color: $base-text;
+	}
+}
+h1 + hr {
 	width: 75px;
 	height: 5px;
 	background: $gray-light;

@@ -3,6 +3,9 @@
 	position: relative;
 	overflow: hidden;
 	padding-bottom: 50px;
+	@include handheld {
+		margin-bottom: 50px;
+	}
 	input, textarea {
 		@include transition(opacity 0.3s ease-in-out);
 		width: 100%;
@@ -34,7 +37,7 @@
 		@include transition(all 0.3s ease-in-out);
 		//@include transition-delay(0.2s);
 		-webkit-transform: scale(1) translate(-50%, -14px);
-	   	   -moz-transform: scale(1) translate(-50%, -14px);
+		   -moz-transform: scale(1) translate(-50%, -14px);
 			-ms-transform: scale(1) translate(-50%, -14px);
 		 	 -o-transform: scale(1) translate(-50%, -14px);
 				transform: scale(1) translate(-50%, -14px);

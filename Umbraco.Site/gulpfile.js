@@ -33,6 +33,7 @@ gulp.task('browserSync', function() {
 gulp.task('sass', function() {
 	return gulp.src('sass/rustikus/**/*.scss') // Gets all files ending with .scss in app/scss and children dirs
 		.pipe(sass()) // Passes it through a gulp-sass
+		.on('error', swallowError)
 		.pipe(gulp.dest('css/rustikus')) // Outputs it in the css folder
 		.pipe(browserSync.reload({ // Reloading with Browser Sync
 			stream: true
@@ -57,6 +58,15 @@ gulp.task('watch', function() {
 	gulp.watch('scripts/libs/**/*.js', ['compile-scripts']);
 	gulp.watch('scripts/src/**/*.js', ['compile-scripts']);
 })
+
+// Swallow Errors
+function swallowError (error) {
+
+	// If you want details of the error in the console
+	console.log(error.toString())
+
+	this.emit('end')
+}
 
 // Optimization Tasks 
 // ------------------

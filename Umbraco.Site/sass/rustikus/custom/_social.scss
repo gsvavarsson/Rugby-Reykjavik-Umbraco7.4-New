@@ -24,6 +24,25 @@
 			position: relative;
 		}
 	}
+	&.social-share {
+		padding-top: 50px;
+		a {
+			display: inline-block;
+			float: left;
+			clear: none;
+			margin: 10px;
+		}
+		.social-inner {
+			width: 130px;
+			margin: 0 auto;
+		}
+		.social-icon {
+			width: 40px;
+			height: 40px;
+			font-size: 23px;
+			padding-top: 5px;
+		}
+	}
 	.facebook {
 		.social-icon {
 			background: $facebook;

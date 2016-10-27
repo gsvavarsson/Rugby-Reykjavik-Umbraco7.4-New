@@ -1,6 +1,53 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @{
 	Layout = "Master.cshtml";
+
+	var image = Model.Content.GetPropertyValue("image");
+	var imageUrl = image == null ? "/media/1009/defaultimage.png" : Umbraco.Media(image).Url;
+
+	var author = Umbraco.TypedContent(Model.Content.GetPropertyValue("authorPicker"));
+	var authorName = author.GetPropertyValue("playerName");
+	var authorImage = author.GetPropertyValue("playerPhoto");
+	var authorImageUrl = authorImage == null ? "/media/1009/defaultimage.png" : Umbraco.Media(authorImage).Url;
+
+
+
+	IPublishedContent nextNews = Model.Content.Next();
+	IPublishedContent previousNews = Model.Content.Previous();
 }
 
-<h2>articlez</h2>
+@section Header {
+	@Html.Partial("_Header")
+}
+<div class="article">
+	<div class="row">
+		<div class="article-image" style="background-image: url(@imageUrl?width=1500&height=720&mode=crop); background-repeat: no-repeat; background-size: cover; background-position: 50%;">
+			<span class="caption">@Model.Content.GetPropertyValue("imageCaption")</span>
+		</div>
+		<div class="col-md-6 col-md-push-6">
+			<div class="row clearfix">
+				<div class="content col-md-9 col-md-push-1 col-xs-10 col-xs-push-1">
+					<h5>
+						@if (Model.Content.HasValue("date")) {
+							var date = Model.Content.GetPropertyValue<DateTime>("date").ToString("dd. MMM \"'\"yy", System.Globalization.CultureInfo.GetCultureInfo("is-is"));
+							<strong class="pull-left">@date</strong>
+						}
+						<span class="pull-right author">
+							<span class="author-image" style="background-image: url(@authorImageUrl);"></span>
+							<strong>@authorName</strong>
+						</span>
+					</h5>
+					<h1>@Model.Content.Name</h1>
+					@Model.Content.GetPropertyValue("content")
+					<div>
+						@Html.Partial("_social-share")
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Footer {
+	@Html.Partial("_Footer")
+}

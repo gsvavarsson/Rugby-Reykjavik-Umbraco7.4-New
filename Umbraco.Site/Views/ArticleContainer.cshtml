@@ -1,0 +1,205 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Globalization
+@using System.Web.Services.Description
+
+@{
+
+	Layout = "Master.cshtml";
+
+	var member = Members.GetCurrentMember();
+
+	var items = Model.Content.Children
+		.OrderByDescending(p => p.CreateDate)
+		.ToList();
+
+	//Paging
+
+	var pageSize = 2;
+
+	var page = 1;
+	int.TryParse(Request.QueryString["page"], out page);
+
+	var totalPages = (int)Math.Ceiling((double)items.Count() / (double)pageSize);
+
+	if (page > totalPages)
+	{
+		page = totalPages;
+	}
+	else if (page < 1)
+	{
+		page = 1;
+	}
+
+	items = items
+		.Skip((page - 1) * pageSize)
+		.Take(pageSize)
+		.ToList();
+
+	var y = 0;
+}
+
+@section Header {
+	@Html.Partial("_Header")
+}
+
+<div class="frontpage-container stories">
+	<div class="bgr-primary-gradient padding-top-100 padding-bottom-100 top-box-orange">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<div>
+						<h1 class="text-center">@Model.Content.Name</h1>
+						<hr />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="ext-articles">
+	<div class="sub-articles">
+		@foreach (var article in items.OrderByDescending(x => x.GetPropertyValue<DateTime>("date")))
+		{
+			
+			var image = article.GetPropertyValue("image");
+			var imageUrl = image == null ? "/media/1009/defaultimage.png" : Umbraco.Media(image).Url;
+			var ClassLeft = (y % 2 == 1) ? " col-sm-push-6" : null;
+			var ClassRight = (y % 2 == 1) ? " col-sm-pull-6" : null;
+			var ImageClass = (y % 2 == 1) ? null : " pull-right";
+			var DivClass = (y % 2 == 1) ? " pull-right" : null;
+
+			<div class="row article-item">
+				<div class="col-sm-6 @ClassLeft">
+					<div class="art-image" style="background-image: url(@imageUrl?width=960mode=crop); background-repeat: no-repeat; background-size: cover; background-position: 50% 0%;">
+					</div>
+				</div>
+
+				<div class="col-sm-6 @ClassRight">
+					<div class="text-column @DivClass">
+						<div class="text-column-header">
+							@if (article.HasValue("date")) {
+								var date = article.GetPropertyValue<DateTime>("date").ToString("dd. MMM \"'\"yy", System.Globalization.CultureInfo.GetCultureInfo("is-is"));
+								<span class="clearfix">@date</span>
+							}
+							<h2 class="clearfix">
+								<a href="@article.Url">
+									@article.Name
+								</a>
+							</h2>
+						</div>
+						<p>@article.GetPropertyValue("summary")</p>
+						<a href="@article.Url" class="pull-right large-text">
+							Lesa meira <span class="btn btn-round btn-outline"><i class="icon-arrow-right"></i></span>
+						</a>
+					</div>
+				</div>
+			</div>
+			y++;
+		}
+	</div>
+
+</div>
+
+@if (totalPages > 1)
+{
+	var baseQueryString = "?";
+	<div class="container">
+		<div class="pagination list-unstyled pager clear">
+			@if (page == 1)
+			{
+				<span class="arrow"><i class="icon-angle-left"></i></span>
+			}
+			else
+			{
+				var queryString = baseQueryString + "page=" + (page - 1);
+				<a href="@queryString"><i class="icon-angle-left"></i></a>
+			}
+
+			@if (totalPages > 8)
+			{
+
+				if (page <= 5)
+				{
+
+					for (var i = 1; i < 8; i++)
+					{
+						var queryString = baseQueryString + "page=" + i;
+						if (i == page) {
+							<span>@i</span>
+						} else {
+							<a href="@queryString">@i</a>
+						}
+					}
+
+				}
+				else if (page > 5)
+				{
+					var queryString = baseQueryString + "page=" + 1;
+					<a href="@queryString" class="underline">1</a>
+
+					if (page > (totalPages - 4))
+					{
+						for (var i = (page - 4); i < (totalPages + 1); i++)
+						{
+							queryString = baseQueryString + "page=" + i;
+							if (i == page) {
+								<span>@i</span>
+							} else {
+								<a href="@queryString">@i</a>
+							}
+						}
+					}
+
+					else
+					{
+						for (var i = (page - 3); i < (page + 4); i++)
+						{
+							queryString = baseQueryString + "page=" + i;
+							if (i == page) {
+								<span>@i</span>
+							} else {
+								<a href="@queryString">@i</a>
+							}
+						}
+					}
+
+				}
+
+				if (totalPages != page)
+				{
+					var queryString = baseQueryString + "page=" + totalPages;
+					<a href="@queryString" class="underline">@totalPages</a>
+				}
+
+			}
+			else
+			{
+				for (var i = 1; i < (totalPages + 1); i++)
+				{
+					var queryString = baseQueryString + "page=" + i;
+					if (i == page) {
+						<span>@i</span>
+					} else {
+						<a href="@queryString">@i</a>
+					}
+				}
+			}
+
+			@if (totalPages == page)
+			{
+				<span class="arrow"><i class="icon-angle-right"></i></span>
+			}
+			else
+			{
+				var queryString = baseQueryString + "page=" + (page + 1);
+				<a href="@queryString"><i class="icon-angle-right"></i></a>
+			}
+
+		</div>
+	</div>
+}
+
+
+@section Footer {
+	@Html.Partial("_Footer")
+}

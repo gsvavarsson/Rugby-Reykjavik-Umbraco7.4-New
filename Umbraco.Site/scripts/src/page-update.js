@@ -6,6 +6,14 @@ app.pageUpdate = {
 		this.readCookie();
 		this.registerEvents();
 		this.checkIfUpdatingActive();
+
+		if (window.location.href.indexOf("debug=true") > -1) {
+			$('body').removeClass('update-in-progress');
+			$('a').each(function(indx, item) {
+				var linking = $(item).attr('href') + '?debug=true';
+				$(item).attr('href', linking);
+			});
+		}
 	},
 
 	registerEvents: function() {
@@ -13,16 +21,16 @@ app.pageUpdate = {
 	},
 
 	readCookie: function(name) {
-	    var nameEQ = name + "=";
-	    var ca = document.cookie.split(';');
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
 
-	    for(var i=0;i < ca.length;i++) {
-	        var c = ca[i];
-	        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-	        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length).split(/ (.+)?/)[0];
-	    }
+		for(var i=0;i < ca.length;i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length).split(/ (.+)?/)[0];
+		}
 
-	    return null;
+		return null;
 	},
 
 	checkIfUpdatingActive: function() {

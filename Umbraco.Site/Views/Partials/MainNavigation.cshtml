@@ -64,16 +64,18 @@
 		<ul class="sublevel level-@(naviLevel)">
 			@foreach (var page in pages)
 			{
-				<li>
-					<a href="@page.Url">@page.Name</a>
-					
-					@* if the current page has any children *@
-					@if (page.Children.Any())
-					{
-						@* Call our helper to display the children *@
-						@childPages(page.Children)
-					}
-				</li>
+				if (page.documentTypeAlias != "Article") {
+					<li>
+						<a href="@page.Url">@page.Name</a>
+						
+						@* if the current page has any children *@
+						@if (page.Children.Any())
+						{
+							@* Call our helper to display the children *@
+							@childPages(page.Children)
+						}
+					</li>
+				}
 			}
 		</ul>
 	}

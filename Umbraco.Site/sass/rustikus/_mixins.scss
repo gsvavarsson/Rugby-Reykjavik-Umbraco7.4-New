@@ -326,6 +326,33 @@
 	}
 }
 
+@mixin triangle($direction, $color: currentcolor, $size: 1em) {
+	width: 0;
+	height: 0;
+	content: ”;
+	z-index: 2;
+
+	$perpendicular-borders: $size solid transparent;
+
+	@if $direction == top {
+		border-left: $perpendicular-borders;
+		border-right: $perpendicular-borders;
+		border-bottom: $size solid $color;
+	} @else if $direction == bottom {
+		border-left: $perpendicular-borders;
+		border-right: $perpendicular-borders;
+		border-top: $size solid $color;
+	} @else if $direction == right {
+		border-bottom: $perpendicular-borders;
+		border-top: $perpendicular-borders;
+		border-left: $size solid $color;
+	} @else if $direction == left {
+		border-bottom: $perpendicular-borders;
+		border-top: $perpendicular-borders;
+		border-right: $size solid $color;
+	}
+}
+
 /* BOOTSTRAP MIXINS
 ----------------------------------*/
 // Utilities

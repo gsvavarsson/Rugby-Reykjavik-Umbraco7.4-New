@@ -2,6 +2,7 @@
 .players {
 	> li {
 		overflow: hidden;
+		margin-bottom: $grid-gutter-width;
 		> a {
 			border: solid 1px $border-color;
 			height: 380px;

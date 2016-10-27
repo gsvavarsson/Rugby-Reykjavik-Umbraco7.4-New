@@ -11,12 +11,15 @@
 	z-index: map-get($zindex, header);
 	@include transition(all 0.3s ease-in-out);
 	&:hover {
-		background: rgba(black, 0);
+		background: rgba(black, 0.9);
 		border-width: 3px;
 	}
 	@at-root body.nav-open {
 		.burger {
-			left: 60px;
+			//left: 60px;
+			@include phone-md {
+				left: auto;
+			}
 		}
 	}
 	a {
@@ -78,6 +81,18 @@
 		&:hover {
 			span {
 				//animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+			}
+		}
+	}
+	@include phone-md {
+		border: none;
+		background: none;
+		top: 10px;
+		right: 10px;
+		left: auto;
+		a {
+			span {
+				height: 3px;
 			}
 		}
 	}

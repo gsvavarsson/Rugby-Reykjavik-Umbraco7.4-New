@@ -17,6 +17,9 @@ header {
 		@at-root body.nav-open {
 			.logo {
 				@include translate(-50%, 0);
+				@include phone-md {
+					@include translate(0%, 0);
+				}
 			}
 			&.scrolled {
 				.logo {
@@ -34,5 +37,22 @@ header {
 			top: -60px;
 			@include scale(0.5);
 		}
+	}
+}
+@include phone-md {
+	header {
+		background: rgba($brand-gray, 0.9);
+		display: block;
+		height: 90px;
+		.logo {
+			overflow: hidden;
+			height: 70px;
+			margin: 0;
+			width: 70px;
+			top: 10px;
+		}
+	}
+	main {
+		padding-top: 90px;
 	}
 }

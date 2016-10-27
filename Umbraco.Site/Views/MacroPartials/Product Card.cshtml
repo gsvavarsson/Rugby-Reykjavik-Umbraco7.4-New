@@ -1,0 +1,73 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+
+@{
+	var productId = Model.MacroParameters["product"];
+	var product = Umbraco.TypedContent(productId);
+	var productName = product.GetPropertyValue("productName");
+	var productDescription = product.GetPropertyValue("productDescription");
+	string productSize = product.GetPropertyValue("productSize").ToString();
+	string productPrice = product.GetPropertyValue("productPrice").ToString();
+	var productImage = product.GetPropertyValue("productImage");
+	var productsecondaryImages = (!string.IsNullOrEmpty(product.GetPropertyValue("productSecondaryIages").ToString()) ? product.GetPropertyValue("productSecondaryIages").ToString() : "");
+}
+
+
+
+<div id="make-3D-space">
+	<div class="product-card">
+		<div class="product-front">
+			<div class="shadow"></div>
+			@if (!string.IsNullOrEmpty(productImage.ToString()))
+			{
+				var imageUrl = Umbraco.TypedMedia(productImage);
+				<!--<div class="product-image" style="background-image: url();"></div>-->
+				<img src="@imageUrl.Url" alt="" />
+			}
+			
+			<div class="image_overlay"></div>
+			<div class="view_details">View details</div>
+			<div class="stats">
+				<div class="stats-container">
+					<h4 class="product_name">Reykjavík Raiders</h4>
+					<span class="product_price">ISK @productPrice</span>
+					<p>@productName</p>
+
+					<div class="product-options">
+						<strong>SIZES</strong>
+						<span>@productSize.Replace(",", ", ").ToUpper()</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="product-back">
+			<div class="shadow"></div>
+			<div class="carousel">
+				<ul>
+					@if (product.HasValue("productSecondaryIages")) {
+						var imagesList = product.GetPropertyValue<string>("productSecondaryIages").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+						var imagesCollection = Umbraco.TypedMedia(imagesList).Where(x => x != null);
+
+						foreach (var imageItem in imagesCollection)
+							{
+								<li><img src="@imageItem.Url" /></li>
+							}
+					}
+				</ul>
+				<div class="arrows-perspective">
+					<div class="carouselPrev">
+						<div class="y"></div>
+						<div class="x"></div>
+					</div>
+					<div class="carouselNext">
+						<div class="y"></div>
+						<div class="x"></div>
+					</div>
+				</div>
+			</div>
+			<div class="flip-back">
+				<div class="cy"></div>
+				<div class="cx"></div>
+			</div>
+		</div>
+	</div>
+</div>	

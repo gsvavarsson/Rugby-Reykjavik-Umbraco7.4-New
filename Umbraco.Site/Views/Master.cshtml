@@ -14,6 +14,7 @@
 	Html.RequiresJs("/scripts/app/app.js");
 
 	var bodyClass = (Model.Content.DocumentTypeAlias == "Frontpage" ? "frontpage" : "subpage");
+	var customClass = Model.Content.GetPropertyValue<string>("customNodeClass");
 	string doctype = "doctype-" + Model.Content.DocumentTypeAlias.ToString().ToLower();
 	string pageId = "page-" + Model.Content.Id.ToString();
 	string pageName = "page-" + Model.Content.UrlName;
@@ -40,6 +41,7 @@
 	<!-- CSS -->
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="/css/rustikus/rustikus.css" type="text/css" />
+	<link rel="stylesheet" href="/css/RTE-Instyle.css" type="text/css" />
 
 	<!--[if IE]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -57,7 +59,7 @@
 	@*<script src='https://www.google.com/recaptcha/api.js'></script>*@
 </head>
 
-<body class="@bodyClass @doctype @pageId @pageName @updateClass">
+<body class="@bodyClass @doctype @pageId @pageName @updateClass @customClass">
 
 	@if (updateInProgress)
 	{

@@ -1,0 +1,330 @@
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Globalization;
+@using System.Xml.XPath
+@{
+	Layout = "Masterpage.cshtml";
+
+	string pageTitle = Model.Content.HasValue("pageTitle") ? Model.Content.GetPropertyValue<string>("pageTitle") : Model.Content.Name;
+
+	// BACKEND
+	string defaultDateString = "1.1.0001 00:00:00";
+
+	var currentCategoryString = Request.QueryString["category"];
+	// article categories data type id = 1097
+	XPathNodeIterator preValueRootElementIterator = umbraco.library.GetPreValues(1097);
+	int? currentCategoryId = null;
+	if (preValueRootElementIterator.MoveNext()) // move to first
+	{
+		// get article category ID
+		XPathNodeIterator preValueIterator = preValueRootElementIterator.Current.SelectChildren("preValue", "");
+		while (preValueIterator.MoveNext())
+		{
+			if (preValueIterator.Current.Value == currentCategoryString)
+			{
+				int categoryId;
+				bool result = Int32.TryParse(preValueIterator.Current.GetAttribute("id", ""), out categoryId);
+				if (result)
+				{
+					currentCategoryId = categoryId;
+				}
+				break;
+			}
+		}
+	}
+
+	var articles = (currentCategoryString != null && currentCategoryId != null) ? Model.Content.Children().Where(x => x.IsVisible() && x.DocumentTypeAlias == "Article" && x.GetPropertyValue<int>("linkToCategories") == currentCategoryId)
+		.OrderByDescending(x => x.GetPropertyValue<DateTime>("originalPublishDate").ToString() != defaultDateString ? x.GetPropertyValue<DateTime>("originalPublishDate") : x.CreateDate).ThenByDescending(x => x.SortOrder)
+    : Model.Content.Children().Where(x => x.IsVisible() && x.DocumentTypeAlias == "Article").OrderByDescending(x => x.GetPropertyValue("originalPublishDate").ToString() != defaultDateString ? x.GetPropertyValue<DateTime>("originalPublishDate") : x.CreateDate).ThenByDescending(x => x.SortOrder);
+
+	// var articles = Model.Content.Children().Where(x => x.IsVisible() && x.DocumentTypeAlias == "Article").OrderByDescending(x => x.GetPropertyValue("originalPublishDate").ToString() != defaultDateString ? x.GetPropertyValue("originalPublishDate") : x.CreateDate);
+
+	var defaultImage = Umbraco.TypedMedia(1154);
+
+	var firstArticle = articles.FirstOrDefault();
+
+	int articlesPerPage = 8;
+	var totalPages = articles.Count() / articlesPerPage;
+	var page = 1;
+
+	string currentPage = Request.QueryString["page"];
+
+	int.TryParse(Request.QueryString["page"], out page);
+
+	if (page > totalPages) {
+		page = totalPages;
+	} else if (page < 1) {
+		page = 1;
+	}
+
+	int toSkip = (page == 1 ? 0 : articlesPerPage * (page-1));
+}
+
+@section Main {
+
+	<div class="container">
+
+		<section class="sub-header">
+
+			<h2>@pageTitle</h2>
+
+		</section>
+
+		<section class="article-overview row">
+
+			<div class="col-sm-8">
+
+				@if (firstArticle != null && page == 1) {
+                    var firstImageId = firstArticle.GetPropertyValue("articleImage");
+
+                    var firstPublishDate = firstArticle.GetPropertyValue("originalPublishDate").ToString() != defaultDateString ? firstArticle.GetPropertyValue<DateTime>("originalPublishDate").ToString("dd.MM.yyyy") : firstArticle.CreateDate.ToString("dd.MM.yyyy");
+                    var firstCat = Umbraco.GetPreValueAsString(firstArticle.GetPropertyValue<int>("linkToCategories"));
+                    string firstHeadline = firstArticle.GetPropertyValue<string>("title");
+                    if (firstHeadline.Length > 32)
+                    {
+                        firstHeadline = firstHeadline.Substring(0, 32) + "...";
+                    }
+                    string firstSummary = firstArticle.GetPropertyValue<string>("summary");
+                    if (firstSummary.Length > 130)
+                    {
+                        firstSummary = firstSummary.Substring(0, 130) + "...";
+                    }
+                    var firstImage = defaultImage;
+                    var firstImageAlt = firstArticle.Name;
+                    if (firstImageId != null)
+                    {
+                        firstImage = Umbraco.TypedMedia(firstImageId);
+                        if (firstImage.GetPropertyValue("altText").ToString() != "")
+                        {
+                            firstImageAlt = firstImage.GetPropertyValue("altText").ToString();
+                        }
+                    }
+
+					<div class="row no-gutter first-article">
+
+						@if (firstImage != null)
+						{
+							<div class="col-sm-6">
+								<figure>
+									<a href="@firstArticle.Url">
+										<img class="hidden-xs" src="@firstImage.Url?width=380&height=350&mode=crop&quality=90" alt="@firstImageAlt" />
+										<img class="hidden-md hidden-sm" src="@firstImage.Url?width=600&height=50&mode=crop&quality=90" alt="@firstImageAlt" />
+									</a>
+								</figure>
+							</div>
+						}
+
+						<div class="col-sm-6">
+							<figcaption>
+								<p class="type">@firstCat - @firstPublishDate</p>
+								<h2 class="no-margin-top"><a href="@firstArticle.Url">@firstHeadline</a></h2>
+
+								<p class="summary">
+									@firstSummary
+								</p>
+
+								<strong><a href="@firstArticle.Url">Nánar</a></strong>
+							</figcaption>
+						</div>
+
+					</div>
+				}
+
+				<div class="row no-gutter all-articles">
+					@foreach(var article in articles.Skip(toSkip + 1).Take(articlesPerPage)) {
+						
+						var imageId = article.GetPropertyValue("articleImage");
+						var publishDate = article.GetPropertyValue("originalPublishDate").ToString() != defaultDateString ? article.GetPropertyValue<DateTime>("originalPublishDate").ToString("dd.MM.yyyy") : article.CreateDate.ToString("dd.MM.yyyy");
+						string cat = Umbraco.GetPreValueAsString(article.GetPropertyValue<int>("linkToCategories"));
+						string summary = article.GetPropertyValue<string>("summary");
+						if (summary.Length > 130) {
+							summary = summary.Substring(0, 130) + "...";
+						}
+						var image = defaultImage;
+						var imageAlt = article.Name;
+						
+						<div class="col-sm-6">
+
+							<div class="single-article">
+
+								<figure class="col-xs-6 col-sm-12">
+									@if (article.HasValue("articleImage")) {
+										image = Umbraco.TypedMedia(imageId);
+										if (image.GetPropertyValue("altText").ToString() != "") {
+											imageAlt = image.GetPropertyValue("altText").ToString();
+										}
+                                    }
+									<a href="@article.Url" class="hidden-xs"><img src="@image.Url?width=385&height=200&mode=crop&quality=90" alt="@imageAlt" /></a>
+									<a href="@article.Url" class="hidden-sm hidden-md"><img src="@image.Url?width=342&height=384&mode=crop&quality=90" alt="@imageAlt" /></a>								
+								</figure>
+
+								<figcaption class="col-xs-6 col-sm-12">
+									<div>
+										<p class="type">@cat - @publishDate</p>
+										<h3 class="no-margin-top"><a href="@article.Url">@article.GetPropertyValue("title")</a></h3>
+									</div>
+									<p class="summary hidden-xs">
+										@summary
+									</p>
+
+									<strong><a href="@article.Url" class="hidden-xs">Nánar</a></strong>
+								</figcaption>
+
+							</div>
+
+						</div>
+					
+					}
+				</div>        
+
+				@if (totalPages > 1)
+				{
+					var baseQueryString = "?";
+					if (currentCategoryString != null)
+					{
+						baseQueryString += "category=" + currentCategoryString + "&";
+					}
+					<div class="pagination list-unstyled pager clear">
+						@if (page == 1)
+						{
+							<span><i class="icon-arrow-65"></i></span>
+						}
+						else
+						{
+							var queryString = baseQueryString + "page=" + (page - 1);
+							<a href="@queryString"><i class="icon-arrow-65"></i></a>
+						}
+
+						@if (totalPages > 8)
+						{
+
+							if (page <= 5)
+							{
+
+								for (var i = 1; i < 8; i++)
+								{
+									var queryString = baseQueryString + "page=" + i;
+									if (i == page) {
+										<span>@i</span>
+									} else {
+										<a href="@queryString">@i</a>
+									}
+								}
+
+							}
+							else if (page > 5)
+							{
+								var queryString = baseQueryString + "page=" + 1;
+								<a href="@queryString" class="underline">1</a>
+
+								if (page > (totalPages - 4))
+								{
+									for (var i = (page - 4); i < (totalPages + 1); i++)
+									{
+										queryString = baseQueryString + "page=" + i;
+										if (i == page) {
+											<span>@i</span>
+										} else {
+											<a href="@queryString">@i</a>
+										}
+									}
+								}
+
+								else
+								{
+									for (var i = (page - 3); i < (page + 4); i++)
+									{
+										queryString = baseQueryString + "page=" + i;
+										if (i == page) {
+											<span>@i</span>
+										} else {
+											<a href="@queryString">@i</a>
+										}
+									}
+								}
+
+							}
+
+							if (totalPages != page)
+							{
+								var queryString = baseQueryString + "page=" + totalPages;
+								<a href="@queryString" class="underline">@totalPages</a>
+							}
+
+						}
+						else
+						{
+							for (var i = 1; i < (totalPages + 1); i++)
+							{
+								var queryString = baseQueryString + "page=" + i;
+								if (i == page) {
+									<span>@i</span>
+								} else {
+									<a href="@queryString">@i</a>
+								}
+							}
+						}
+
+						@if (totalPages == page)
+						{
+							<span><i class="icon-arrow-66"></i></span>
+						}
+						else
+						{
+							var queryString = baseQueryString + "page=" + (page + 1);
+							<a href="@queryString"><i class="icon-arrow-66"></i></a>
+						}
+
+					</div>
+
+				}
+
+			</div>
+
+
+			<div class="col-sm-4">
+
+				@RenderFilters()
+
+                @uEdit.Helper.Render("rightArea", Model.Content.Id, this.Html, CultureInfo.CurrentCulture.Name)
+
+			</div>
+
+		</div>
+
+	</section>
+
+}
+
+@helper RenderList() {
+	
+
+}
+
+@helper RenderFilters() {
+	
+	XPathNodeIterator iterator = umbraco.library.GetPreValues(1097);
+	iterator.MoveNext();
+	XPathNodeIterator preValues = iterator.Current.SelectChildren("preValue", "");
+
+	<div class="article-filters box white-headings">
+
+		<h3 class="no-margin-top">Veldu flokk</h3>
+
+		<div class="form-select">
+
+			<select class="cat-filter" name="cat">
+				@*Masterclass hack, set links as values, then use javascript to redirect when selectbox changes.*@
+				<option value="">Allir flokkar</option>
+
+				@while (preValues.MoveNext())
+				{
+					string value = preValues.Current.Value.ToString();
+
+					<option value="@value">@value</option>
+				}
+			</select>
+
+		</div>
+
+	</div>
+}

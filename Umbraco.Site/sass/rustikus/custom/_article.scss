@@ -1,0 +1,65 @@
+.article {
+	overflow: hidden;
+	min-height: 100%;
+	.author {
+		display: block;
+		> strong {
+			padding-top: 12px;
+			padding-right: 10px;
+			opacity: 1;
+			float: right;
+		}
+	}
+	.author-image {
+		height: 50px;
+		width: 50px;
+		display: block;
+		background-size: cover;
+		float: right;
+		border-radius: 50%;
+		border: solid 1px $border-color;
+		&:hover {
+			+ strong {
+				opacity: 1;
+			}
+		}
+	}
+	.article-image {
+		width: 50%;
+		position: fixed;
+		height: 100%;
+		z-index: 2;
+		@include handheld {
+			position: relative;
+			width: 100%;
+			height: 430px;
+		}
+		> span {
+			width: 100%;
+			background: rgba(0, 0, 0, .5);
+			display: block;
+			bottom: 0px;
+			position: absolute;
+			padding: 15px 50px;
+			font-size: 30px;
+			color: $white;
+		}
+	}
+	h1 {
+		padding-top: 60px;
+		text-align: left;
+		position: relative;
+		padding-bottom: 20px;
+		margin-bottom: 30px;
+		&:after {
+			@include calc(width, "100% + 200px");
+			bottom: 0px;
+			height: 3px;
+			background: $brand-gray;
+			opacity: 0.5;
+			content: "";
+			position: absolute;
+			left: -200px;
+		}
+	}
+}

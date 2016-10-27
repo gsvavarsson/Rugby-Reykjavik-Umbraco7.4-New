@@ -1,17 +1,15 @@
-main {
-	margin-bottom: 600px;
-	background-color: white;
-	z-index: 2;
-	position: relative
-}
 footer {
-	position: fixed;
-	z-index: 0;
+	//position: fixed;
+	position: relative;
+	z-index: 2;
 	height: 600px;
 	left: 0px; 
 	bottom: 0px;
 	width: 100%;
 	background: $brand-gray;
+	@include handheld {
+		height: auto;
+	}
 	h3 {
 		color: $white;
 	}

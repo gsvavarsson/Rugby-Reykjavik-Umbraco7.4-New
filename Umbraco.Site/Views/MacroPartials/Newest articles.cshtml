@@ -1,74 +1,62 @@
 ﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
 @using System.Globalization;
 
-@*
-    Macro to list all child pages under a specific page in the content tree.
-
-    How it works:
-        - Confirm the startNodeId macro parameter has been passed in with a value
-        - Loop through all child pages
-        - Display a list of link to those pages, sorted by the value of the propertyAlias
-
-    Macro Parameters To Create, for this macro to work:
-    Alias:startNodeId     Name:Select starting page    Type:Content Picker
-*@
-
 @{
-    var startNodeId = Model.MacroParameters["startNodeId"];
-    var eventNode = Umbraco.TypedContent(startNodeId);
-    var eventList = eventNode.Children.OrderByDescending(x => x.GetPropertyValue<DateTime>("date"));
+	var startNodeId = Model.MacroParameters["startNodeId"];
+	var eventNode = Umbraco.TypedContent(startNodeId);
+	var eventList = eventNode.Children.OrderByDescending(x => x.GetPropertyValue<DateTime>("date"));
 }
 @if (startNodeId != null)
 {
-    @* Get the starting page *@
+	@* Get the starting page *@
 var startNode = Umbraco.Content(startNodeId);
 var selection = startNode.Children.Where("Visible");
 
 if (selection.Any())
 {
-    <ul class="row fp-newest-articles">
+	<ul class="row fp-newest-articles">
 
-        @foreach (var item in eventList.OrderByDescending(x => x.GetPropertyValue<DateTime>("date")).Take(3))
-        {
-            var name = item.Name;
-            if (name.Length > 35)
-            {
-                name = name.Substring(0, 35) + "...";
-            }
-            var imageId = item.GetPropertyValue("image");
-            var image = ""; ;
-            if (item.HasValue("image"))
-            {
-                image = Umbraco.TypedMedia(imageId).Url;
-            }
-            var articleType = item.GetPropertyValue("articleType");
-            var typeLink = "/blog";
-            var typeString = "Blog";
-            if (articleType.ToString() == "Article")
-            {
-                typeLink = "/greinar";
-                typeString = "Greinar";
-            }
-            if (articleType.ToString() == "News") {
-                typeLink = "/frettir";
-                typeString = "Fréttir";
-            }
+		@foreach (var item in eventList.OrderByDescending(x => x.GetPropertyValue<DateTime>("date")).Take(3))
+		{
+			var name = item.Name;
+			if (name.Length > 35)
+			{
+				name = name.Substring(0, 35) + "...";
+			}
+			var imageId = item.GetPropertyValue("image");
+			var image = ""; ;
+			if (item.HasValue("image"))
+			{
+				image = Umbraco.TypedMedia(imageId).Url;
+			}
+			var articleType = item.GetPropertyValue("articleType");
+			var typeLink = "/blog";
+			var typeString = "Blog";
+			if (articleType.ToString() == "Article")
+			{
+				typeLink = "/greinar";
+				typeString = "Greinar";
+			}
+			if (articleType.ToString() == "News") {
+				typeLink = "/frettir";
+				typeString = "Fréttir";
+			}
 
-            <li class="col-md-4 col-sm-4">
-                <a href="@item.Url" class="art-image" style="background-image: url(@image?width=580&mode=crop&quality=80&format=jpg);"></a>
-                <div class="event-info">
-                    <h3><a href="@item.Url" class="name pull-left">@name</a></h3>
-                    <p class="text">@item.GetPropertyValue("summary")</p>
-                    <a href="@item.Url">Nánar</a>
-                    @if (item.HasValue("date"))
-                    {
-                        var date = item.GetPropertyValue<DateTime>("date").ToString("d. MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("is-is"));
-                        <span class="article-date pull-right text-right">@date</span>
-                    }
-                    <a href="@typeLink" class="type pull-right text-right icon-@articleType" data-type="@typeString"></a>
-                </div>
-            </li>
-        }
-    </ul>
-    }
+			<li class="col-md-4 col-sm-4 article-item">
+				<a href="@item.Url" class="art-image" style="background-image: url(@image?width=580&mode=crop&quality=80&format=jpg);"></a>
+				<div class="event-info">
+					<h3><a href="@item.Url" class="name pull-left">@name</a></h3>
+					<p class="text">@item.GetPropertyValue("summary")</p>
+					<a href="@item.Url">Nánar</a>
+					@if (item.HasValue("date"))
+					{
+						var date = item.GetPropertyValue<DateTime>("date").ToString("d. MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("is-is"));
+						<span class="article-date pull-right text-right">@date</span>
+					}
+					<a href="@typeLink" class="type pull-right text-right icon-@articleType" data-type="@typeString"></a>
+				</div>
+			</li>
+		}
+	</ul>
+	}
 }

@@ -1,4 +1,25 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Globalization
 @{
     Layout = "Master.cshtml";
 }
+
+@section Header {
+    @Html.Partial("_Header")
+}
+
+@if (!Model.Content.GetPropertyValue<bool>("disableUedit"))
+{
+    @uEdit.Helper.Render("bodyArea", Model.Content.Id, this.Html, CultureInfo.CurrentCulture.Name)
+}
+else
+{
+    @* If uedit is disabled, what's gonna be instead? *@
+}
+
+@section Footer {
+    @Html.Partial("_Footer")
+}
+
+
+

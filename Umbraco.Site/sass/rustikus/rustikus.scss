@@ -18,6 +18,7 @@
 @import "modules/base/_z-index.scss";
 
 /* CUSTOM MODULES */
+@import "modules/custom/_main.scss";
 @import "modules/custom/_fonts.scss";
 @import "modules/custom/_sections.scss";
 @import "modules/custom/_nomargin.scss";
@@ -33,6 +34,8 @@
 @import "modules/custom/_navigation.scss";
 @import "modules/custom/_headings.scss";
 @import "modules/custom/_footer.scss";
+@import "modules/custom/_pager.scss";
+@import "modules/custom/_update.scss";
 
 /* BOOTSTRAP OVERWRITE */
 @import "custom/_bootstrap-overwrite.scss";
@@ -41,16 +44,20 @@
 @import "_global.scss";
 
 /* CUSTOM */
+@import "custom/_rte.scss";
 @import "custom/_social.scss";
+@import "custom/_youtube-embed.scss";
 @import "custom/_notification-banner.scss";
 @import "custom/_custom-classes.scss";
 @import "custom/_events-container.scss";
 @import "custom/_article-container.scss";
+@import "custom/_article.scss";
 @import "custom/_quotes.scss";
 @import "custom/_header.scss";
 @import "custom/_contact-form.scss";
 @import "custom/_slider.scss";
 @import "custom/_fp-numbers.scss";
+@import "custom/_product-card.scss";
 @import "custom/_players.scss";
 
 

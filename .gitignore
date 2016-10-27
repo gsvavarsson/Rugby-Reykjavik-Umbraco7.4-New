@@ -76,6 +76,7 @@ Umbraco.Site/App_Data/cache/
 Umbraco.Site/App_Data/umbraco.config
 Umbraco.Site/aspnet_client/
 Umbraco.Site/node_modules/
+Umbraco.Site/media/
 
 Umbraco.Site/scripts/app
 Umbraco.Site/scripts/app/compiled.js

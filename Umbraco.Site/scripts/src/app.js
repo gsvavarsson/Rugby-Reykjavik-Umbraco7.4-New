@@ -13,6 +13,8 @@ var app = {
 		app.scroll.init();
 		app.numbersgame.init();
 		app.contactForm.init();
+		app.productCard.init();
+		app.popup.init();
 	}
 };
 

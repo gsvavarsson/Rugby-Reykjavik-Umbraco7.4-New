@@ -1,4 +1,59 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @{
-	Layout = "Master.cshtml";
+    Layout = "Master.cshtml";
+
+    var imageId = CurrentPage.GetPropertyValue("playerPhoto");
+    var imageUrl = "";
+    if (!string.IsNullOrEmpty(imageId.ToString())) {
+        imageUrl = Umbraco.TypedMedia(imageId).Url;
+    }
+
+    var nickname = CurrentPage.GetPropertyValue("playerPhoto");
+    var team = CurrentPage.GetPropertyValue("team");
+    var nationality = CurrentPage.GetPropertyValue("nationality");
+    var position = CurrentPage.GetPropertyValue("position");
+    var playingSince = CurrentPage.GetPropertyValue("playingSince");
+    var raidersSeasons = CurrentPage.GetPropertyValue("seasonsPlayedWithRFR");
+
+}
+
+@section Header {
+	@Html.Partial("_Header")
+}
+
+<div class="frontpage-container stories">
+	<div class="bgr-primary-gradient padding-top-100 padding-bottom-100 top-box-orange">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<div>
+						<h1 class="text-center">@CurrentPage.GetPropertyValue("playerName")</h1>
+						<hr />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="player-photo" style="background-image: url(@imageUrl?width=500&quality=90);"></div>
+			</div>
+			<div class="col-sm-6">
+
+            </div>
+            <div class="col-sm-6">
+                <ul>
+                    <li>Nationality: @nationality</li>
+                    <li>Position: @position</li>
+                    <li>Playing Rugby since: @playingSince</li>
+                    <li>With Raiders: @raidersSeasons</li>
+                </ul>
+            </div>
+        </div>
+	</div>
+</div>
+
+@section Footer {
+	@Html.Partial("_Footer")
 }

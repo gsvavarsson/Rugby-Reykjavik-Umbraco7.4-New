@@ -1,0 +1,7 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	var videoLink = Model.MacroParameters["youtubeID"];
+}
+<div class="video-wrapper">
+	<iframe width="560" height="349" src="http://www.youtube.com/embed/@videoLink?rel=0&hd=1" frameborder="0" allowfullscreen></iframe>
+</div>

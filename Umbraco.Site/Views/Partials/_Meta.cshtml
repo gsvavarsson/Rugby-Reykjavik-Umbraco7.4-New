@@ -1,69 +1,78 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 
 @{
-    // VALUES FROM SETTINGS NODE
-    var settingsNode = Umbraco.TypedContent(2086);
-    string storeName = (!String.IsNullOrEmpty(settingsNode.GetPropertyValue<string>("pageName")) ? (string)settingsNode.GetPropertyValue("pageName") : "[Page Name]");
-    string storeTagline = (!String.IsNullOrEmpty(settingsNode.GetPropertyValue<string>("pageTagline")) ? (string)settingsNode.GetPropertyValue("pageTagline") : "[Page Tagline]");
+	// VALUES FROM SETTINGS NODE
+	var settingsNode = Umbraco.TypedContent(2086);
+	string storeName = (!String.IsNullOrEmpty(settingsNode.GetPropertyValue<string>("pageName")) ? (string)settingsNode.GetPropertyValue("pageName") : "[Page Name]");
+	string storeTagline = (!String.IsNullOrEmpty(settingsNode.GetPropertyValue<string>("pageTagline")) ? (string)settingsNode.GetPropertyValue("pageTagline") : "[Page Tagline]");
 
 
-    // PAGE TITLE
-    string titleSuffix = storeName;
-    string titleTagline = storeTagline;
-    string nodeName = (Model.Content.HasValue("pageTitle")) ? Model.Content.GetPropertyValue<string>("pageTitle") : Model.Content.Name;
-    string titleDivider = " | ";
-    string pageTitle = (Model.Content.DocumentTypeAlias != "Frontpage" ? nodeName + titleDivider + titleSuffix : titleSuffix + titleDivider + titleTagline);
+	// PAGE TITLE
+	string titleSuffix = storeName;
+	string titleTagline = storeTagline;
+	string nodeName = (Model.Content.HasValue("pageTitle")) ? Model.Content.GetPropertyValue<string>("pageTitle") : Model.Content.Name;
+	string titleDivider = " | ";
+	string pageTitle = (Model.Content.DocumentTypeAlias != "Frontpage" ? nodeName + titleDivider + titleSuffix : titleSuffix + titleDivider + titleTagline);
 
-    // URL
-    string siteUrl = Request.ServerVariables["HTTP_HOST"];
-    string pageUrl = Model.Content.Url;
+	// URL
+	string siteUrl = Request.ServerVariables["HTTP_HOST"];
+	string pageUrl = Model.Content.Url;
 
-    // PAGE TYPE
-    string pageType = "website";
-    string documentType = Model.Content.DocumentTypeAlias;
-    switch (documentType)
-    {
-        case "Frontpage":
-        case "Subpage":
-            pageType = "website";
-            break;
+	// PAGE TYPE
+	string pageType = "website";
+	string documentType = Model.Content.DocumentTypeAlias;
+	switch (documentType)
+	{
+		case "Frontpage":
+		case "Subpage":
+			pageType = "website";
+			break;
 
-        case "Article":
-            pageType = "article";
-            break;
-    }
+		case "Article":
+			pageType = "article";
+			break;
+	}
 
-    //get the open graph title
-    string ogTitle = (Model.Content.HasValue("ogTitle")) ? Model.Content.GetPropertyValue<string>("ogTitle") : pageTitle;
+	//get the open graph title
+	string ogTitle = (Model.Content.HasValue("ogTitle")) ? Model.Content.GetPropertyValue<string>("ogTitle") : pageTitle;
 
-    //meta description
-    string metaDescription = (Model.Content.HasValue("metaDescription")) ? Model.Content.GetPropertyValue<string>("metaDescription") : "";
+	//meta description
+	string metaDescription = (Model.Content.HasValue("metaDescription", true)) ? Model.Content.GetPropertyValue<string>("metaDescription", true) : "";
 
-    //open graph description
-    string ogDescription = (Model.Content.HasValue("ogDescription")) ? Model.Content.GetPropertyValue<string>("ogDescription") : "";
+	//open graph description
+	string ogDescription = (Model.Content.HasValue("ogDescription", true)) ? Model.Content.GetPropertyValue<string>("ogDescription", true) : "";
+	if (!string.IsNullOrEmpty(ogDescription))
+	{
+		switch (documentType)
+		{
+			case "Article":
+				ogDescription = (Model.Content.HasValue("summary")) ? Model.Content.GetPropertyValue<string>("summary") : "";
+				break;
+		}
+	}
 
-    //meta tags
-    string metaTags = (Model.Content.HasValue("metaTags")) ? Model.Content.GetPropertyValue<string>("metaTags") : "";
+	//meta tags
+	string metaTags = (Model.Content.HasValue("metaTags", true)) ? Model.Content.GetPropertyValue<string>("metaTags", true) : "";
 
-    //open graph image
-    string ogImageId = (Model.Content.HasValue("ogImage")) ? Model.Content.GetPropertyValue<string>("ogImage") : "";
-    if (!string.IsNullOrEmpty(ogImageId))
-    {
-        switch (documentType)
-        {
-            case "Article":
-                ogImageId = (Model.Content.HasValue("image")) ? Model.Content.GetPropertyValue<string>("image") : "";
-                break;
-        }
-    }
-    string ogImageUrl = "";
-    if (!string.IsNullOrEmpty(ogImageId))
-    {
-        ogImageUrl = siteUrl + Umbraco.TypedMedia(ogImageId).Url;
-    }
+	//open graph image
+	string ogImageId = (Model.Content.HasValue("ogImage", true)) ? Model.Content.GetPropertyValue<string>("ogImage", true) : "";
+	if (!string.IsNullOrEmpty(ogImageId))
+	{
+		switch (documentType)
+		{
+			case "Article":
+				ogImageId = (Model.Content.HasValue("image")) ? Model.Content.GetPropertyValue<string>("image") : "";
+				break;
+		}
+	}
+	string ogImageUrl = "";
+	if (!string.IsNullOrEmpty(ogImageId))
+	{
+		ogImageUrl = siteUrl + Umbraco.TypedMedia(ogImageId).Url;
+	}
 
-    //check if hidden from search engines
-    bool noIndex = (Model.Content.HasValue("hideFromSearchEngines")) ? Model.Content.GetPropertyValue<bool>("hideFromSearchEngines") : false;
+	//check if hidden from search engines
+	bool noIndex = (Model.Content.HasValue("hideFromSearchEngines")) ? Model.Content.GetPropertyValue<bool>("hideFromSearchEngines") : false;
 }
 
 <!-- charset and x-ua -->
@@ -81,8 +90,8 @@
 <!-- search engines -->
 <meta name="description" content="@metaDescription" />
 <meta name="keywords" content="@metaTags" />
-<meta name="author" content="Sendiráðið Vefstofa" />
-<meta name="copyright" content="Content eigendur" />
+<meta name="author" content="Gísli Freyr Svavarsson" />
+<meta name="copyright" content="Rugbyfélag Reykjavikur" />
 
 <!-- social media -->
 <meta property="og:url" content="@siteUrl" />
@@ -100,7 +109,7 @@
 
 @if (noIndex)
 {
-    <meta name="robots" content="noindex,nofollow" />
+	<meta name="robots" content="noindex,nofollow" />
 }
 
 <link rel="icon" type="image/ico" href="/favicon.ico">
