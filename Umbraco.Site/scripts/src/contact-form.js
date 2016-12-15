@@ -26,23 +26,30 @@ app.contactForm = {
 				isValid = false;
 			}
 
-			return isValid;
+			if (isValid) {
+				// Continue
+				var api_key = 'key-91fd16ba19c4591bef576ca56f6eb4b1';
+				var domain = '/usercontrols/form.handler.aspx';
 
-			// Continue
-			var api_key = 'key-91fd16ba19c4591bef576ca56f6eb4b1';
-			var domain = 'mydomain.mailgun.org';
-			var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+				var data = {
+					from: 'Rugby enthusiast ' + $('#contact_email').val(),
+					to: 'gisli@corivo.is',
+					subject: $('#contact_name').val(),
+					text: $('#contact_msg').val()
+				};
 
-			var data = {
-				from: 'Excited User <me@samples.mailgun.org>',
-				to: 'serobnic@mail.ru',
-				subject: 'Hello',
-				text: 'Testing some Mailgun awesomness!'
-			};
-
-			mailgun.messages().send(data, function (error, body) {
-				console.log(body);
-			});
+				$.ajax('/usercontrols/form.handler.aspx', {
+					//url: domain,
+					type:"POST",
+					data: data,
+					success:function(a,b,c){
+						console.log( 'mail sent: ', b );
+					}.bind(this),
+					error:function( xhr, status, errText ){
+						console.log( 'mail sent failed: ', xhr.responseText);
+					}
+				});
+			}
 		});
 	}
 }

@@ -4,12 +4,16 @@
 
 	var image = Model.Content.GetPropertyValue("image");
 	var imageUrl = image == null ? "/media/1009/defaultimage.png" : Umbraco.Media(image).Url;
+	var authorID = Model.Content.GetPropertyValue("authorPicker");
+	var authorName = "";
+	var authorImageUrl = "";
 
-	var author = Umbraco.TypedContent(Model.Content.GetPropertyValue("authorPicker"));
-	var authorName = author.GetPropertyValue("playerName");
-	var authorImage = author.GetPropertyValue("playerPhoto");
-	var authorImageUrl = authorImage == null ? "/media/1009/defaultimage.png" : Umbraco.Media(authorImage).Url;
-
+	if (string.IsNullOrEmpty("authorID")) {
+		var author = Umbraco.TypedContent(Model.Content.GetPropertyValue("authorPicker"));
+		authorName = author.GetPropertyValue("playerName").ToString();
+		var authorImage = author.GetPropertyValue("playerPhoto");
+		authorImageUrl = authorImage == null ? "/media/1009/defaultimage.png" : Umbraco.Media(authorImage).Url;
+	}
 
 
 	IPublishedContent nextNews = Model.Content.Next();
@@ -32,10 +36,12 @@
 							var date = Model.Content.GetPropertyValue<DateTime>("date").ToString("dd. MMM \"'\"yy", System.Globalization.CultureInfo.GetCultureInfo("is-is"));
 							<strong class="pull-left">@date</strong>
 						}
-						<span class="pull-right author">
-							<span class="author-image" style="background-image: url(@authorImageUrl);"></span>
-							<strong>@authorName</strong>
-						</span>
+						@if (string.IsNullOrEmpty("authorID")) {
+							<span class="pull-right author">
+								<span class="author-image" style="background-image: url(@authorImageUrl);"></span>
+								<strong>@authorName</strong>
+							</span>
+						}
 					</h5>
 					<h1>@Model.Content.Name</h1>
 					@Model.Content.GetPropertyValue("content")
