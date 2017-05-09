@@ -6,13 +6,16 @@
 	Layout = null;
 
 	/* JS
-	   concatenated and minified by Grunt
+	   concatenated and minified by Gulp
 	*/
+	/*
 	Html.RequiresJs("/scripts/libs/jquery-1.11.3.min.js");
 	Html.RequiresJs("/scripts/libs/equal-height.min.js");
 	Html.RequiresJs("/scripts/libs/moment.min.js");
-	Html.RequiresJs("/scripts/app/app.js");
+	*/
+	Html.RequiresJs("/scripts/app/app.min.js");
 
+	var updateDate = "2017.05.08.B";
 	var bodyClass = (Model.Content.DocumentTypeAlias == "Frontpage" ? "frontpage" : "subpage");
 	var customClass = Model.Content.GetPropertyValue<string>("customNodeClass");
 	string doctype = "doctype-" + Model.Content.DocumentTypeAlias.ToString().ToLower();
@@ -48,7 +51,7 @@
 
 	<!-- CSS -->
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="/css/rustikus/rustikus.css" type="text/css" />
+	<link rel="stylesheet" href="/css/rustikus/rustikus.min.css?v=@updateDate" type="text/css" />
 	<link rel="stylesheet" href="/css/RTE-Instyle.css" type="text/css" />
 
 	<!--[if IE]>
@@ -60,8 +63,8 @@
 	</script>
 
 	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
-	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
-	<script src="http://ajax.aspnetcdn.com/ajax/mvc/5.1/jquery.validate.unobtrusive.min.js"></script>
+	<!--<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/mvc/5.1/jquery.validate.unobtrusive.min.js"></script>-->
 
 	<!-- RECAPTCHA -->
 	@*<script src='https://www.google.com/recaptcha/api.js'></script>*@
@@ -77,6 +80,8 @@
 	{
 		<text>@Html.Partial("_PageUpdate")</text>
 	}
+
+	@Html.Partial("_loading")
 
 	@RenderSection("Header", false)
 

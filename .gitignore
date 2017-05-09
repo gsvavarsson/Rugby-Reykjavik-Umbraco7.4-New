@@ -33,7 +33,7 @@ packages/
 [Oo]bj/
 [Bb]in/
 
-*.config
+#*.config
 *.aps
 *.bak
 *.build.csdef

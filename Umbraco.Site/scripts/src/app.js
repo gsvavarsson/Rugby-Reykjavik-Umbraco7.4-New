@@ -13,7 +13,9 @@ var app = {
 		app.scroll.init();
 		app.numbersgame.init();
 		app.contactForm.init();
+		app.loader.init();
 		app.productCard.init();
+		app.location.init();
 		app.popup.init();
 	}
 };

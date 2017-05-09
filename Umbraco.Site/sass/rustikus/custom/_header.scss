@@ -16,7 +16,7 @@ header {
 		@include translate(0%, 0);
 		@at-root body.nav-open {
 			.logo {
-				@include translate(-50%, 0);
+				//@include translate(-50%, 0);
 				@include phone-md {
 					@include translate(0%, 0);
 				}

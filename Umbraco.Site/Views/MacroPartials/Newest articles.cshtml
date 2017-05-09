@@ -53,7 +53,7 @@ if (selection.Any())
 						var date = item.GetPropertyValue<DateTime>("date").ToString("d. MMMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("is-is"));
 						<span class="article-date pull-right text-right">@date</span>
 					}
-					<a href="@typeLink" class="type pull-right text-right icon-@articleType" data-type="@typeString"></a>
+					<span href="@typeLink" class="type pull-right text-right icon-@articleType" data-type="@typeString"></span>
 				</div>
 			</li>
 		}

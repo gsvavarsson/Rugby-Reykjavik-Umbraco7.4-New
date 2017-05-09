@@ -7,6 +7,7 @@
 	var authorID = Model.Content.GetPropertyValue("authorPicker");
 	var authorName = "";
 	var authorImageUrl = "";
+	var facebookEvent = Model.Content.GetPropertyValue("facebookEventLink");
 
 	if (string.IsNullOrEmpty("authorID")) {
 		var author = Umbraco.TypedContent(Model.Content.GetPropertyValue("authorPicker"));
@@ -43,10 +44,39 @@
 							</span>
 						}
 					</h5>
-					<h1>@Model.Content.Name</h1>
+					<h2>@Model.Content.Name</h2>
 					@Model.Content.GetPropertyValue("content")
+					@if (!string.IsNullOrEmpty("facebookEvent")) {
+						<div class="facebook-event">
+							<a href="@facebookEvent" target="_blank"><i class="icon-facebook"></i>Viðburðurinn á Facebook</a>
+						</div>
+					}
 					<div>
 						@Html.Partial("_social-share")
+					</div>
+					<div class="prev-next-news">
+						@if (previousNews != null) {
+							var previousImage = "http://www.fillmurray.com/67/67";
+							if (previousNews.HasValue("image")) {
+								var previousImageSrc = previousNews.GetPropertyValue("image");
+								previousImage = Umbraco.TypedMedia(previousImageSrc).Url;
+							}
+							<a href="@previousNews.Url" class="previous-link">
+								<span style="background-image: url(@previousImage);"></span>
+								<em>@previousNews.Name</em>
+							</a>
+						}
+						@if (nextNews != null) {
+							var nextImage = "http://www.fillmurray.com/67/67";
+							if (nextNews.HasValue("image")) {
+								var nextImageSrc = nextNews.GetPropertyValue("image");
+								nextImage = Umbraco.TypedMedia(nextImageSrc).Url;
+							}
+							<a href="@nextNews.Url" class="next-link">
+								<em>@nextNews.Name</em>
+								<span style="background-image: url(@nextImage);"></span>
+							</a>
+						}
 					</div>
 				</div>
 			</div>

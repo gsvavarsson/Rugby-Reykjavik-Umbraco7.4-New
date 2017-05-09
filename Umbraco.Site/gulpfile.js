@@ -10,7 +10,9 @@ var gulpIf = require('gulp-if');
 var cssnano = require('gulp-cssnano');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
+var rename = require('gulp-rename');
 var del = require('del');
+var minify = require('gulp-minify-css');
 var runSequence = require('run-sequence');
 
 // Basic Gulp task syntax
@@ -125,3 +127,17 @@ gulp.task('build', function(callback) {
 		callback
 	)
 })
+
+// Relase - minify and stuff
+gulp.task('_release', function () {
+	gulp.src(['scripts/app/app.js'])
+		.pipe(concat('app.temp.js'))
+		.pipe(uglify())
+		.pipe(rename('app.min.js'))
+		.pipe(gulp.dest('scripts/app'));
+
+	gulp.src(['css/rustikus/rustikus.css'])
+		.pipe(minify())
+		.pipe(rename('rustikus.min.css'))
+		.pipe(gulp.dest('css/rustikus'));
+});

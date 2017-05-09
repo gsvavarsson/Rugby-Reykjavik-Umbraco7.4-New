@@ -1,33 +1,21 @@
 ﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
 @using System.Globalization;
 
-@*
-	Macro to list all child pages under a specific page in the content tree.
-
-	How it works:
-		- Confirm the startNodeId macro parameter has been passed in with a value
-		- Loop through all child pages
-		- Display a list of link to those pages, sorted by the value of the propertyAlias
-
-	Macro Parameters To Create, for this macro to work:
-	Alias:startNodeId     Name:Select starting page    Type:Content Picker
-*@
-
 @{ 
 	var startNodeId = Model.MacroParameters["startNodeId"];
 	var eventNode = Umbraco.TypedContent(startNodeId);
 	var eventList = eventNode.Children.OrderBy(x => x.GetPropertyValue<DateTime>("date"));
+	DateTime today = DateTime.Today;
 }
 @if (startNodeId != null)
 {
-	@* Get the starting page *@
 	var startNode = Umbraco.Content(startNodeId);
 	var selection = startNode.Children.Where("Visible");
 
 	if (selection.Any())
 	{
 		<ul class="row fp-upcoming-events">
-			@foreach (var item in eventList.OrderBy(x => x.GetPropertyValue<DateTime>("date")).Take(3))
+			@foreach (var item in eventNode.Children.Where(x => x.IsVisible() && x.GetPropertyValue<DateTime>("date") >= today).OrderBy(x => x.GetPropertyValue<DateTime>("date")).Take(3))
 			{
 				var name = item.Name;
 				if (name.Length > 35)
